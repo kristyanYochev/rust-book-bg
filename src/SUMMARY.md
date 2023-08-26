@@ -2,7 +2,7 @@
 
 [Езикът Rust](title-page.md)
 [Предговор](foreword.md)
-[Introduction](ch00-00-introduction.md)
+[Въведение](ch00-00-introduction.md)
 
 ## Getting started
 
