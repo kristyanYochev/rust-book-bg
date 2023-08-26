@@ -1,7 +1,7 @@
 # Езикът Rust
 
 [Езикът Rust](title-page.md)
-[Foreword](foreword.md)
+[Предговор](foreword.md)
 [Introduction](ch00-00-introduction.md)
 
 ## Getting started
