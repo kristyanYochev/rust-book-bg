@@ -218,5 +218,5 @@ sure what it does or how to use it, use the application programming interface
 [visualstudio]: https://visualstudio.microsoft.com/downloads/
 [community]: https://www.rust-lang.org/community
 
-[^rustaceans]: Идва от игра на думи на англисйки език: Rust + Crustacean
+[^rustaceans]: Идва от игра на думи на английки език: Rust + Crustacean
   (ракообразно) (бел. прев.)
