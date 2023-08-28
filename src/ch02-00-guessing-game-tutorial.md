@@ -530,24 +530,38 @@ this version number, or the code examples in this tutorial may not work: -->
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
-<!-- До тук е преведено -->
-In the *Cargo.toml* file, everything that follows a header is part of that
+
+<!-- In the *Cargo.toml* file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
 semantic version specifier `0.8.5`. Cargo understands [Semantic
-Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
+Versioning][semver]<!-- ignore (sometimes called *SemVer*), which is a
 standard for writing version numbers. The specifier `0.8.5` is actually
 shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
-below 0.9.0.
+below 0.9.0. -->
+Във файла *Crago.toml*, всичко след заглавието е част от съответния раздел,
+който продължава до началото на следващия. В `[dependencies]` подавате на Cargo
+кои от външни щайги зависи Вашият проект и кои техни версии са Ви нужни. В нашия
+случай задаваме щайгата `rand` със семантична версия `0.8.5`. Cargo разбира от
+[Семантични Версии][semver]<!-- ignore --> (понякога наричани *SemVer*), което
+е страндарт за изписване на номера на версии. Спецификатора `0.8.5` е съкратено
+от `^0.8.5`, което означава която и да е версия поне 0.8.5, но по-ниска от
+0.9.0.
 
-Cargo considers these versions to have public APIs compatible with version
+<!-- Cargo considers these versions to have public APIs compatible with version
 0.8.5, and this specification ensures you’ll get the latest patch release that
 will still compile with the code in this chapter. Any version 0.9.0 or greater
-is not guaranteed to have the same API as what the following examples use.
+is not guaranteed to have the same API as what the following examples use. -->
+Cargo приема, че тези версии имат публични API-ове, които са съвместими с версия
+0.8.5 и тази спецификация Ви осигурява послената patch версия, която все още ще
+се компилира с кода в тази глава. Всяка версия от 0.9.0 нагоре не гарантира да
+има същото API като това, което следните примери изполват.
 
-Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2.
+<!-- Now, without changing any of the code, let’s build the project, as shown in
+Listing 2-2. -->
+Сега, без да променяме никакъв код, нека изградим проекта както е показано в
+разпечатка 2-2.
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -576,33 +590,53 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-<span class="caption">Listing 2-2: The output from running `cargo build` after
-adding the rand crate as a dependency</span>
+<span class="caption">Разпечатка 2-2: Изхода от изпълнението на `cargo build`
+след добавянето на rand щанката като зависимост</span>
 
-You may see different version numbers (but they will all be compatible with the
+<!-- You may see different version numbers (but they will all be compatible with the
 code, thanks to SemVer!) and different lines (depending on the operating
-system), and the lines may be in a different order.
+system), and the lines may be in a different order. -->
+Можете да видите различни номера на версиите (но всички те ще са съвместими с
+кода, благодарение на SemVer) и различни редове (в зависимост от операционната
+система) и редовете може да са в различен ред.
 
-When we include an external dependency, Cargo fetches the latest versions of
+<!-- When we include an external dependency, Cargo fetches the latest versions of
 everything that dependency needs from the *registry*, which is a copy of data
 from [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem
-post their open source Rust projects for others to use.
+post their open source Rust projects for others to use. -->
+Когато включваме външна зависимост Cargo изтегля последните версии на всичко,
+от което тази зависимост се нуждае, от *регистъра*, което е копие на данните от
+[Crates.io][cratesio]. Crates.io е мястото, където хората в екосистемата на Rust
+публикуват техните проекти с отворен код на Rust, така че другите да ги видят.
 
-After updating the registry, Cargo checks the `[dependencies]` section and
+<!-- After updating the registry, Cargo checks the `[dependencies]` section and
 downloads any crates listed that aren’t already downloaded. In this case,
 although we only listed `rand` as a dependency, Cargo also grabbed other crates
 that `rand` depends on to work. After downloading the crates, Rust compiles
-them and then compiles the project with the dependencies available.
+them and then compiles the project with the dependencies available. -->
+След опресняване на регистъра, Cargo проверява раздела `[dependencies]` и
+изтегля всички щайки, които са описани и не са вече изтеглени. В този случай,
+въпреки че сме описали само `rand` като зависимост, Cargo изтегли и други щайги
+нужни на `rand` за да работи. След изтеглянието на щайгите, Rust ги компилира и
+после компилира проекта с наличните зависимости.
 
-If you immediately run `cargo build` again without making any changes, you
+<!-- If you immediately run `cargo build` again without making any changes, you
 won’t get any output aside from the `Finished` line. Cargo knows it has already
 downloaded and compiled the dependencies, and you haven’t changed anything
 about them in your *Cargo.toml* file. Cargo also knows that you haven’t changed
 anything about your code, so it doesn’t recompile that either. With nothing to
-do, it simply exits.
+do, it simply exits. -->
+Ако веднага изпълните `cargo build` отново без да правите промени, няма да
+видите нищо изведено освен реда `Finished`. Cargo знаке, че вече е изтеглил и
+компилирал зависимостите и Вие не сте ги променяли по никакъв начин във Вашия
+*Cargo.toml* файл. Cargo също знае, че не сте променяли нищо в кода си, затова
+не го прекомпилира и него. Нямайки какво да прави, той просто приключва
+изпълнение.
 
-If you open the *src/main.rs* file, make a trivial change, and then save it and
-build again, you’ll only see two lines of output:
+<!-- If you open the *src/main.rs* file, make a trivial change, and then save it and
+build again, you’ll only see two lines of output: -->
+Ако отворите файла *src/main.rs*, направите малка промяна, след което запазите
+и изградите наново, ще видите изведени само два реда:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -615,22 +649,33 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
-These lines show that Cargo only updates the build with your tiny change to the
+<!-- These lines show that Cargo only updates the build with your tiny change to the
 *src/main.rs* file. Your dependencies haven’t changed, so Cargo knows it can
-reuse what it has already downloaded and compiled for those.
+reuse what it has already downloaded and compiled for those. -->
+Тези редове показват, че Cargo само опреснява изградения файл с малката Ви 
+промяна в *src/main.rs*. Вашите зависимости не са се сменили, затова Cargo знае,
+че може да преизползва всичко, което вече е изтеглил и компилирал за тях.
 
-#### Ensuring Reproducible Builds with the *Cargo.lock* File
+<!-- #### Ensuring Reproducible Builds with the *Cargo.lock* File -->
+#### Осигуряване на Повторими Изграждания с Файла *Cargo.lock*
 
-Cargo has a mechanism that ensures you can rebuild the same artifact every time
+<!-- Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, say that
 next week version 0.8.6 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
 break your code. To handle this, Rust creates the *Cargo.lock* file the first
 time you run `cargo build`, so we now have this in the *guessing_game*
-directory.
+directory. -->
+Cargo има механизъм, за да подигури, че можете да преизградите същите артефакти
+всеки път, когато Вие или някой друг изгражда Вашия код: Cargo ще използва само
+версиите на зависиостите, които сте отбелязали, докато не смените с други.
+Например, ако следващата седмица излезе версия 0.8.6 на щайгата `rand` и тази
+версия съдържа важен bug fix, но съдържа и регресия, която ще счупи кода ви. За
+да се справи с това, Rust създава файла *Cargo.lock* първия път като изпълните
+`cargo build`, заради това сега го имаме в директорията *guessing_game*.
 
-When you build a project for the first time, Cargo figures out all the versions
+<!-- When you build a project for the first time, Cargo figures out all the versions
 of the dependencies that fit the criteria and then writes them to the
 *Cargo.lock* file. When you build your project in the future, Cargo will see
 that the *Cargo.lock* file exists and will use the versions specified there
@@ -638,17 +683,33 @@ rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
 remain at 0.8.5 until you explicitly upgrade, thanks to the *Cargo.lock* file.
 Because the *Cargo.lock* file is important for reproducible builds, it’s often
-checked into source control with the rest of the code in your project.
+checked into source control with the rest of the code in your project. -->
+Когато изграждате проект за пръв път, Cargo преценява всички версии на 
+зависимостите, които спазват критериите и ги записва във файла *Cargo.lock*.
+Когато изграждате проекта си в бъдеще, Cargo ще види, че файла *Cargo.lock*
+съществува и ще използва версиите, описани в него, вместо да ги изчислява
+наново. Това автоматично Ви дава повторими изграждания. С други думи, Вашият
+проект ще си остане с 0.8.5, докато изрично не надградите, благодарение на файла
+*Cargo.lock*. Поради факта, че файла *Cargo.lock* е важен за повторими
+изграждания, често е добавен в управлението на версиите заедно с останалия код
+в проекта Ви.
 
-#### Updating a Crate to Get a New Version
+<!-- #### Updating a Crate to Get a New Version -->
+#### Надграждане на Щайга за да Получите Нова Версия
 
-When you *do* want to update a crate, Cargo provides the command `update`,
+<!-- When you *do* want to update a crate, Cargo provides the command `update`,
 which will ignore the *Cargo.lock* file and figure out all the latest versions
 that fit your specifications in *Cargo.toml*. Cargo will then write those
 versions to the *Cargo.lock* file. Otherwise, by default, Cargo will only look
 for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
 released the two new versions 0.8.6 and 0.9.0, you would see the following if
-you ran `cargo update`:
+you ran `cargo update`: -->
+Когато *искате* да надградите щайга, Cargo предоставя командата `update`, която
+ще игнорира файла *Cargo.lock* и открие всичките нови версии, които отговарят
+на изискванията Ви в *Cargo.toml*. Cargo после ще запише тези версии във файла
+*Cargo.lock*. Иначе, по подразбиране Cargo само ще гледа за версии по-високи от
+0.8.5 и по-малки от 0.9.0. Ако на щайгата `rand` са издадени 2 нови версии 0.8.6
+и 0.9.0, ще видите следното като изпълните `cargo update`:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -662,45 +723,63 @@ $ cargo update
     Updating rand v0.8.5 -> v0.8.6
 ```
 
-Cargo ignores the 0.9.0 release. At this point, you would also notice a change
+<!-- Cargo ignores the 0.9.0 release. At this point, you would also notice a change
 in your *Cargo.lock* file noting that the version of the `rand` crate you are
 now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9.*x*
-series, you’d have to update the *Cargo.toml* file to look like this instead:
+series, you’d have to update the *Cargo.toml* file to look like this instead: -->
+Cargo игнорира версията 0.9.0. Тогава също ще забележите промяна във Вашия файл
+*Cargo.lock* показваща, че версията на щайгата `rand`, която ползвате, е 0.8.6.
+За да използвате версия 0.9.0 на `rand` или която и да е версия в серията
+0.9.*x*, трябва да обновите файла *Cargo.toml* за да изглежда по следния начин:
 
 ```toml
 [dependencies]
 rand = "0.9.0"
 ```
 
-The next time you run `cargo build`, Cargo will update the registry of crates
+<!-- The next time you run `cargo build`, Cargo will update the registry of crates
 available and reevaluate your `rand` requirements according to the new version
-you have specified.
+you have specified. -->
+Следващият път като изпълните `cargo build`, Cargo ще обнови регистъра с налични
+щайги и преразгледа изискванията Ви към `rand` спрямо новата версия, която сте
+посочили.
 
-There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore -->, which we’ll discuss in Chapter 14, but
+<!-- There’s a lot more to say about [Cargo][doccargo]<!-- ignore and [its
+ecosystem][doccratesio]<!-- ignore , which we’ll discuss in Chapter 14, but
 for now, that’s all you need to know. Cargo makes it very easy to reuse
 libraries, so Rustaceans are able to write smaller projects that are assembled
-from a number of packages.
+from a number of packages. -->
+Има още много да се каже за [Cargo][doccargo]<!-- ignore --> и [екосистемата
+му][doccratesio]<!-- ignore -->, които ще обсъдим в 14. глава. Засега това е
+всичко, което Ви е нужно да знаете. Cargo прави изключително лесно
+преизползването на библиотеки, за да могат Rustaceans да пишат по-малки проекти,
+които са "сглобени" от множество пакети.
 
-### Generating a Random Number
+<!-- ### Generating a Random Number -->
+### Генериране на Случайно Число
 
-Let’s start using `rand` to generate a number to guess. The next step is to
-update *src/main.rs*, as shown in Listing 2-3.
+<!-- Let’s start using `rand` to generate a number to guess. The next step is to
+update *src/main.rs*, as shown in Listing 2-3. -->
+Нека започнем да ползваме `rand` за да генерираме случйни числа за познаване.
+Следващата стъпка е да променим *src/main.rs* както е показано в разпечатка 2-3.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-3: Adding code to generate a random
-number</span>
+<span class="caption">Разпечатка 2-3: Добавяне на код за генериране на случайно
+число</span>
 
-First we add the line `use rand::Rng;`. The `Rng` trait defines methods that
+<!-- First we add the line `use rand::Rng;`. The `Rng` trait defines methods that
 random number generators implement, and this trait must be in scope for us to
-use those methods. Chapter 10 will cover traits in detail.
+use those methods. Chapter 10 will cover traits in detail. -->
+Първо добавяме реда `use rand::Rng;`. Трейта `Rng` дефинира методи, които са
+имплементирани от генератори на случайни числа и този трейт трябва да е в обсег,
+за да ползваме тези методи. Глава 10. ще покрие трейтове в повече детайли.
 
-Next, we’re adding two lines in the middle. In the first line, we call the
+<!-- Next, we’re adding two lines in the middle. In the first line, we call the
 `rand::thread_rng` function that gives us the particular random number
 generator we’re going to use: one that is local to the current thread of
 execution and is seeded by the operating system. Then we call the `gen_range`
@@ -709,7 +788,17 @@ trait that we brought into scope with the `use rand::Rng;` statement. The
 `gen_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
-need to specify `1..=100` to request a number between 1 and 100.
+need to specify `1..=100` to request a number between 1 and 100. -->
+След тива, добавяме два реда посредата. На първия ред, извикваме функцията
+`rand::thread_rng`, която ни дава конкретния генератор на случайни числа, който
+ще ползваме - такъв, който е локален за сегашната нижка на изпълнение и е
+сийднат от операционната система. След това ще извикаме метода `gen_range` на
+генератора на случайни числа. Този метод е дефиниран от трейта `Rng`, който
+въведохме в обхват с декларацията `use rand::Rng;`. Метода `gen_range` приема
+интервален израз като аргумент и генерира случайно число в интервала. Вида
+интервален израз, който ползваме, е във формата `начало..=край` и е затворен и
+в двата края, за това трябва да напишем `1..=100`, за да поискаме число между 1
+и 100.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
