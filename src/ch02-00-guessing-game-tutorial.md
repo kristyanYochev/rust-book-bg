@@ -1,33 +1,51 @@
-# Programming a Guessing Game
+<!-- # Programming a Guessing Game -->
+# Програмиране на Игра за Отгатване
 
-Let’s jump into Rust by working through a hands-on project together! This
+<!-- Let’s jump into Rust by working through a hands-on project together! This
 chapter introduces you to a few common Rust concepts by showing you how to use
 them in a real program. You’ll learn about `let`, `match`, methods, associated
 functions, external crates, and more! In the following chapters, we’ll explore
 these ideas in more detail. In this chapter, you’ll just practice the
-fundamentals.
+fundamentals. -->
+Нека скочим в Rust като работим върху практически проект заедно! Тази глава Ви
+въвежда в някои често срещани идеи в Rust, като Ви показва как да ги ползвате в
+реална програма. Ще научите за `let`, `match`, методи, асоциирани функции,
+външни щайги и още! В следващите глави ще разгледаме тези идеи в повече детайли.
+В тази глава просто ще упражните основите.
 
-We’ll implement a classic beginner programming problem: a guessing game. Here’s
+<!-- We’ll implement a classic beginner programming problem: a guessing game. Here’s
 how it works: the program will generate a random integer between 1 and 100. It
 will then prompt the player to enter a guess. After a guess is entered, the
 program will indicate whether the guess is too low or too high. If the guess is
-correct, the game will print a congratulatory message and exit.
+correct, the game will print a congratulatory message and exit. -->
+Ще имплементираме класическа задача за начинаещи: игра за отгатване. Ето как ще
+работо: програмата генерира случайно число между 1 и 100. Тя ще помоли
+потребителя да отгатне. След като предполагано число се въведе, програмата ще
+каже дали числото е било твърде голямо или твърде малко. Ако числото е познато,
+играта ще изведе поздравително съобщение и ще приключи изпълнение.
 
-## Setting Up a New Project
+<!-- ## Setting Up a New Project -->
+## Създаване на Нов Проект
 
-To set up a new project, go to the *projects* directory that you created in
-Chapter 1 and make a new project using Cargo, like so:
+<!-- To set up a new project, go to the *projects* directory that you created in
+Chapter 1 and make a new project using Cargo, like so: -->
+За да създадете нов проект, отидете в директорията *projects*, която направихте
+в първа глава и създайте нов проект чрез Cargo по следния начин:
 
 ```console
 $ cargo new guessing_game
 $ cd guessing_game
 ```
 
-The first command, `cargo new`, takes the name of the project (`guessing_game`)
+<!-- The first command, `cargo new`, takes the name of the project (`guessing_game`)
 as the first argument. The second command changes to the new project’s
-directory.
+directory. -->
 
-Look at the generated *Cargo.toml* file:
+Първата команда, `cargo new`, взима името на проекта (`guessing_game`) като
+първи аргумент. Втората команда влиза в директорията на проекта.
+
+<!-- Look at the generated *Cargo.toml* file: -->
+Разгледайте генерирания файл *Cargo.toml*:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
@@ -38,163 +56,241 @@ cargo run > output.txt 2>&1
 cd ../../..
 -->
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
-As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the *src/main.rs* file:
+<!-- As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
+you. Check out the *src/main.rs* file: -->
+Както видяхте в 1. глава, `cargo new` генерира програма "Hello, world!" за Вас.
+Разгледайте файла *src/main.rs*:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
-Now let’s compile this “Hello, world!” program and run it in the same step
-using the `cargo run` command:
+<!-- Now let’s compile this “Hello, world!” program and run it in the same step
+using the `cargo run` command: -->
+Нека сега компилираме тази програма и я изпълним в същата стъпка чрез командата
+`cargo run`:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
-The `run` command comes in handy when you need to rapidly iterate on a project,
+<!-- The `run` command comes in handy when you need to rapidly iterate on a project,
 as we’ll do in this game, quickly testing each iteration before moving on to
-the next one.
+the next one. -->
+Комндата `run` е много удобна, когато трябва бързо да итерирате върху даден
+проект, както ще правим ние за тази игра тествайки бързичко всяка итерация преди
+да продължим към следващата.
 
-Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
+<!-- Reopen the *src/main.rs* file. You’ll be writing all the code in this file. -->
+Отворете файла *src/main.rs* отново. Ще пишем всичкия код в този файл.
 
-## Processing a Guess
+<!-- ## Processing a Guess -->
+## Обработка на предположение
 
-The first part of the guessing game program will ask for user input, process
+<!-- The first part of the guessing game program will ask for user input, process
 that input, and check that the input is in the expected form. To start, we’ll
 allow the player to input a guess. Enter the code in Listing 2-1 into
-*src/main.rs*.
+*src/main.rs*. -->
+Първата част от прогарамата за играта за отгатване ще помоли потребителя да
+въведе нещо, ще обработи въведеното и ще провери дали въведеното е в очаквания
+формат. За да започнем, ще позволим на играча да въведе предположение. Въведете
+кода от разпечатка 2-1 в *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-1: Code that gets a guess from the user and
-prints it</span>
+<span class="caption">Разпечатка 2-1: Код, който взима предположение от
+потребителя и го извежда</span>
 
-This code contains a lot of information, so let’s go over it line by line. To
+<!-- This code contains a lot of information, so let’s go over it line by line. To
 obtain user input and then print the result as output, we need to bring the
 `io` input/output library into scope. The `io` library comes from the standard
-library, known as `std`:
+library, known as `std`: -->
+Този код съдържа много информация, за това ще го разгледаме ред по ред. За да
+вземем въведеното от потребителя и да го изведем, ни е нужна библиотеката `io`
+за входно/изходни операции да е в обхвата (scope). Библиотеката `io` идва от
+стандартната библиотека, позната като `std`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-By default, Rust has a set of items defined in the standard library that it
+<!-- By default, Rust has a set of items defined in the standard library that it
 brings into the scope of every program. This set is called the *prelude*, and
-you can see everything in it [in the standard library documentation][prelude].
+you can see everything in it [in the standard library documentation][prelude]. -->
+По подразбиране, Rust има набор от елементи дефинирани в стандартната
+библиотека, които вкарва в обхвата на всяка програма. Този набор се нарича
+*prelude* и можете да видите всичко в него [в документацията на стандартната
+библиотека][prelude].
 
-If a type you want to use isn’t in the prelude, you have to bring that type
+<!-- If a type you want to use isn’t in the prelude, you have to bring that type
 into scope explicitly with a `use` statement. Using the `std::io` library
 provides you with a number of useful features, including the ability to accept
-user input.
+user input. -->
+Ако изкате да ползвате някой тип и той не е в prelude, трябва явно да го
+въведете в обхвата чрез декларацията `use`. Ползването на библиотеката `std::io`
+Ви предоставя няколко полезни функионалности, включае възможността да четете
+потребителски вход.
 
-As you saw in Chapter 1, the `main` function is the entry point into the
-program:
+<!-- As you saw in Chapter 1, the `main` function is the entry point into the
+program: -->
+Както видяхте в 1. глава, функцията `main` е началната точка на програмата:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-The `fn` syntax declares a new function; the parentheses, `()`, indicate there
-are no parameters; and the curly bracket, `{`, starts the body of the function.
+<!-- The `fn` syntax declares a new function; the parentheses, `()`, indicate there
+are no parameters; and the curly bracket, `{`, starts the body of the function. -->
+Синтаксиса `fn` декларира нова функция; скобите `()` означават, че няма
+параметри; и къдравата скоба - `{` - означава началото на тялото на функцията.
 
-As you also learned in Chapter 1, `println!` is a macro that prints a string to
-the screen:
+<!-- As you also learned in Chapter 1, `println!` is a macro that prints a string to
+the screen: -->
+Както също научихте в 1. глава, `println!` е макрос, който извежда низ на
+екрана:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
-This code is printing a prompt stating what the game is and requesting input
-from the user.
+<!-- This code is printing a prompt stating what the game is and requesting input
+from the user. -->
+Този код извежда подкана, която обяснява каква е тази игра и моли потребителя
+да въведе нещо.
 
-### Storing Values with Variables
+<!-- ### Storing Values with Variables -->
+### Съхранение на Стойности в Променливи
 
-Next, we’ll create a *variable* to store the user input, like this:
+<!-- Next, we’ll create a *variable* to store the user input, like this: -->
+Сега ще създадем *променлива* (*variable*) за да съхраним въведеното от
+потребителя по следния начин:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
-Now the program is getting interesting! There’s a lot going on in this little
-line. We use the `let` statement to create the variable. Here’s another example:
+<!-- Now the program is getting interesting! There’s a lot going on in this little
+line. We use the `let` statement to create the variable. Here’s another example: -->
+Вече програмата започва да става интересна! Много неща се случват на този малък
+ред. Използваме декларацията `let`, за да създадем променлива. Ето друг пример:
 
 ```rust,ignore
 let apples = 5;
 ```
 
-This line creates a new variable named `apples` and binds it to the value 5. In
+<!-- This line creates a new variable named `apples` and binds it to the value 5. In
 Rust, variables are immutable by default, meaning once we give the variable a
 value, the value won’t change. We’ll be discussing this concept in detail in
-the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
+the [“Variables and Mutability”][variables-and-mutability]<!-- ignore
 section in Chapter 3. To make a variable mutable, we add `mut` before the
-variable name:
+variable name: -->
+Този ред създава нова пролменлива на име `apples` и я обвързва със стойността 5.
+В Rust, промнливите са непроменими (immutable) по подразбиране, което означава,
+че след като дадем стойност на променливата, стойността няма да се променя. Ще
+обсъждаме тази идея в детайли в раздела ["Променливи и променимост"]
+[variables-and-mutability]<!-- ignore --> на 3. глава. За да направим
+променливата променима, трябва да добавим `mut` преди името на променливата.
 
 ```rust,ignore
-let apples = 5; // immutable
-let mut bananas = 5; // mutable
+let apples = 5; // непроменима
+let mut bananas = 5; // променима
 ```
 
-> Note: The `//` syntax starts a comment that continues until the end of the
+<!-- > Note: The `//` syntax starts a comment that continues until the end of the
 > line. Rust ignores everything in comments. We’ll discuss comments in more
-> detail in [Chapter 3][comments]<!-- ignore -->.
+> detail in [Chapter 3][comments]ignore. -->
+> Бележка: Синтаксиса `//` дава начало на коментар, който продължава до края на
+> реда. Rust игнорира всичко в коментарите. Ще обсъдим коментарите в повече
+> детайли в [3. глава][comments]<!-- ignore -->.
 
-Returning to the guessing game program, you now know that `let mut guess` will
+<!-- Returning to the guessing game program, you now know that `let mut guess` will
 introduce a mutable variable named `guess`. The equal sign (`=`) tells Rust we
 want to bind something to the variable now. On the right of the equal sign is
 the value that `guess` is bound to, which is the result of calling
 `String::new`, a function that returns a new instance of a `String`.
-[`String`][string]<!-- ignore --> is a string type provided by the standard
-library that is a growable, UTF-8 encoded bit of text.
+[`String`][string]<!-- ignore is a string type provided by the standard
+library that is a growable, UTF-8 encoded bit of text. -->
+Връщайки се на програмата за отгатване вече знаете, че `let mut guess` ще
+създаде променима променлива с името `guess`. Знакът равно (`=`) казва на Rust,
+че сега искаме да обвържем нещо с променливата. От дясната страна на равното е
+стойността която ще бъде обвързана с `guess`, която е резултата от извикването
+на функцията `String::new`, която връща нова инстанция на `String`. [`String`]
+[string]<!-- ignore --> е низов тип, предоставен от стандартната библиотека
+представляващ растящ текст кодиран с UTF-8.
 
-The `::` syntax in the `::new` line indicates that `new` is an associated
+<!-- The `::` syntax in the `::new` line indicates that `new` is an associated
 function of the `String` type. An *associated function* is a function that’s
 implemented on a type, in this case `String`. This `new` function creates a
 new, empty string. You’ll find a `new` function on many types because it’s a
-common name for a function that makes a new value of some kind.
+common name for a function that makes a new value of some kind. -->
+Синтаксиса `::` в реда `::new` показва, че `new` е асоциирана функция с типа
+`String`. *Асоциирана функция* е функция, която имплементирана върху даден тип,
+в този случай `String`. Тази функция `new` създава нов празен низ. Ще намерите
+функция `new` на много типове, защото е често срещано име за функция която
+създава някаква нова стойност.
 
-In full, the `let mut guess = String::new();` line has created a mutable
-variable that is currently bound to a new, empty instance of a `String`. Whew!
+<!-- In full, the `let mut guess = String::new();` line has created a mutable
+variable that is currently bound to a new, empty instance of a `String`. Whew! -->
+Като цяло редът `let mut guess = String::new();` създава променима променлива,
+която в момента е обвързана с нова празна инстанция на `String`. Фюх!
 
-### Receiving User Input
+<!-- ### Receiving User Input -->
+### Получаване на Потребителски Вход
 
-Recall that we included the input/output functionality from the standard
+<!-- Recall that we included the input/output functionality from the standard
 library with `use std::io;` on the first line of the program. Now we’ll call
 the `stdin` function from the `io` module, which will allow us to handle user
-input:
+input: -->
+Припомняме, че сме включили входно/изходните функционалности от стандартната
+библиотека чрез `use std::io;` на първия ред на програмата. Нега ще извикаме
+функцията `stdin` от модула `io`, коет още ни позволи да обработим потребителски
+вход:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-If we hadn’t imported the `io` library with `use std::io;` at the beginning of
+<!-- If we hadn’t imported the `io` library with `use std::io;` at the beginning of
 the program, we could still use the function by writing this function call as
 `std::io::stdin`. The `stdin` function returns an instance of
-[`std::io::Stdin`][iostdin]<!-- ignore -->, which is a type that represents a
-handle to the standard input for your terminal.
+[`std::io::Stdin`][iostdin]<!-- ignore, which is a type that represents a
+handle to the standard input for your terminal. -->
+Ако не бяхме включили библиотеката `io` чрез `use std::io;` в началото на
+програмата, пак бихме могли да ползваме тази функционалност пишейки това
+извикване като `std::io::stdin`. Функцията `stdin` връща инстанция на
+[`std::io::Stdin`][iostdin]<!-- ignore -->, което е тип, който представлява
+"дръжка" (handle) към стандартния потребителски вход за Вашия терминал.
 
-Next, the line `.read_line(&mut guess)` calls the [`read_line`][read_line]<!--
-ignore --> method on the standard input handle to get input from the user.
+<!-- Next, the line `.read_line(&mut guess)` calls the [`read_line`][read_line]<!--
+ignore method on the standard input handle to get input from the user.
 We’re also passing `&mut guess` as the argument to `read_line` to tell it what
 string to store the user input in. The full job of `read_line` is to take
 whatever the user types into standard input and append that into a string
 (without overwriting its contents), so we therefore pass that string as an
 argument. The string argument needs to be mutable so the method can change the
-string’s content.
+string’s content. -->
+След това, реда `.read_line(&mut guess)` извиква метода
+[`read_line`][read_line]<!-- ignore --> на стандарната входна дръжка, за да
+прочетем вход от потребителя. Освен това подаваме `&mut guess` като аргумент на
+`read_line`, за да му кажем в кой низ да съхрани потребитлеския вход. Цялата
+работа на `read_line` е да вземе това, което потребителя е въвел, и да го добави
+накрая на низ (без да презаписва съдържанието му) и за това подаваме този низ
+като аргумент. Низът трябва да е променим за да може метода да промени
+съдържанието му.
 
-The `&` indicates that this argument is a *reference*, which gives you a way to
+<!-- The `&` indicates that this argument is a *reference*, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
 copy that data into memory multiple times. References are a complex feature,
 and one of Rust’s major advantages is how safe and easy it is to use
@@ -202,87 +298,146 @@ references. You don’t need to know a lot of those details to finish this
 program. For now, all you need to know is that, like variables, references are
 immutable by default. Hence, you need to write `&mut guess` rather than
 `&guess` to make it mutable. (Chapter 4 will explain references more
-thoroughly.)
+thoroughly.) -->
+Знакът `&` означава, че този аргумент е *препратка* (*reference*), което Ви дава
+начин да дадете на няколко части на кода Ви да достъпят едни и съши данни без да
+се налага да копирате тези данни няколко пъти в паметта. Препратките са зложна
+функционалност и едно от големите предимства на Rust е безопасността и лекотата
+на ползването на препратки. Не Ви е нужно да знаете голяма част от тези детайли,
+за да довършите тази програма. Засега това, което трябва да знаете е, че като
+променливите, препратките са непроменими по подразбиране. За това трявбва да
+напишете `&mut guess` вместо `&guess`, за да я направите променима. (Глава 4 ще
+обясни препратките по-подробно.)
 
 <!-- Old heading. Do not remove or links may break. -->
 <a id="handling-potential-failure-with-the-result-type"></a>
 
-### Handling Potential Failure with `Result`
+<!-- ### Handling Potential Failure with `Result` -->
+### Обработване на Възможен Неуспех чрез `Result`
 
-We’re still working on this line of code. We’re now discussing a third line of
+<!-- We’re still working on this line of code. We’re now discussing a third line of
 text, but note that it’s still part of a single logical line of code. The next
-part is this method:
+part is this method: -->
+Все още работим върху този ред код. Сега разглеждаме трети ред текст, но
+забележете, че все още е част от един логически ред код. Следващата част е този
+метод:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-We could have written this code as:
+<!-- We could have written this code as: -->
+Можехме да напишем този код по следния начин:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it. It’s
+<!-- However, one long line is difficult to read, so it’s best to divide it. It’s
 often wise to introduce a newline and other whitespace to help break up long
 lines when you call a method with the `.method_name()` syntax. Now let’s
-discuss what this line does.
+discuss what this line does. -->
+Обаче един дълъг ред е труден за четене, така че е по-добре да го разделим.
+Често е добре да слагаме нов ред или друго празно място, за да помагаме с
+разделянето на дълги редове, когато извикваме метод със синтаксиса
+`.method_name()`. Нека сега обсъдим какво прави този ред.
 
-As mentioned earlier, `read_line` puts whatever the user enters into the string
+<!-- As mentioned earlier, `read_line` puts whatever the user enters into the string
 we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
-ignore --> is an [*enumeration*][enums]<!-- ignore -->, often called an *enum*,
+ignore is an [*enumeration*][enums]<!-- ignore, often called an *enum*,
 which is a type that can be in one of multiple possible states. We call each
-possible state a *variant*.
+possible state a *variant*. -->
+Както споменахме по-горе, `read_line` слага това, което потребителя въведе, в
+низа, който му подаваме, но освен това връща стойност `Result`.
+[`Result`][result] <!-- ignore --> е [*енумерация*][enums]<!-- ignore -->
+(enumeration), често наричана *енум* (enum), което е тип, който може да бъде в
+едно от няколко възможни състояния. Наричаме отделните възможни състояния
+*варианти* (*variant*).
 
-[Chapter 6][enums]<!-- ignore --> will cover enums in more detail. The purpose
-of these `Result` types is to encode error-handling information.
+<!-- [Chapter 6][enums]ignore will cover enums in more detail. The purpose
+of these `Result` types is to encode error-handling information. -->
+[Глава 6][enums]<!-- ignore --> ще разгледа енуми в повече детайли. Целта на
+тези `Result` типове е да представляват информация за обработка на грешки.
 
-`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
+<!-- `Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
 operation was successful, and inside `Ok` is the successfully generated value.
 The `Err` variant means the operation failed, and `Err` contains information
-about how or why the operation failed.
+about how or why the operation failed. -->
+Вариантите на `Result` са `Ok` и `Err`. Варианта `Ok` означава, че операцията е
+успешна и в `Ok` се съдържа успешно генерираната стойност. Варианта `Err`
+означава, че операцията се е провалила и `Err` съдържа информация за това как
+операцията се е провалила.
 
-Values of the `Result` type, like values of any type, have methods defined on
-them. An instance of `Result` has an [`expect` method][expect]<!-- ignore -->
+<!-- Values of the `Result` type, like values of any type, have methods defined on
+them. An instance of `Result` has an [`expect` method][expect]<!-- ignore
 that you can call. If this instance of `Result` is an `Err` value, `expect`
 will cause the program to crash and display the message that you passed as an
 argument to `expect`. If the `read_line` method returns an `Err`, it would
 likely be the result of an error coming from the underlying operating system.
 If this instance of `Result` is an `Ok` value, `expect` will take the return
 value that `Ok` is holding and return just that value to you so you can use it.
-In this case, that value is the number of bytes in the user’s input.
+In this case, that value is the number of bytes in the user’s input. -->
+Стойностите от типа `Result`, като стойности от който и да е тип, имат
+дефинирани методи върху тях. Инстанции на `Result` имат
+[метод `expect`][expect]<!-- ignore -->, който можете да извикате. Ако тази
+инстанция на `Result` е стойност `Err`, `expect` ще накара програмата да се
+срине и да покаже съобщението, което сте подали като аргумент на `expect`. Ако
+`read_line` върне `Err`, най-вероятно би било в резултат на грешка, която
+произтича от операционната система. Ако тази инстанция на `Result` е стойност
+`Ok`, то `expect` ще вземе върната стойност, която `Ok` държи и ще върне просто
+тази стойност, за да можете да я ползвате. В този случай, стойността е броя
+байтове във въведеното от потребителя.
 
-If you don’t call `expect`, the program will compile, but you’ll get a warning:
+<!-- If you don’t call `expect`, the program will compile, but you’ll get a warning: -->
+Ако не извикате `expect`, програмата ще се компилира, но ще получите
+предупреждение:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
-Rust warns that you haven’t used the `Result` value returned from `read_line`,
-indicating that the program hasn’t handled a possible error.
+<!-- Rust warns that you haven’t used the `Result` value returned from `read_line`,
+indicating that the program hasn’t handled a possible error. -->
+Rust Ви предупреждава, че не сте използвали `Result`а, който Ви е върнал
+`read_line`, което означава, че програмата не е обработила потенциална грешка.
 
-The right way to suppress the warning is to actually write error-handling code,
+<!-- The right way to suppress the warning is to actually write error-handling code,
 but in our case we just want to crash this program when a problem occurs, so we
 can use `expect`. You’ll learn about recovering from errors in [Chapter
-9][recover]<!-- ignore -->.
+9][recover]ignore. -->
+Правилният начин да подтиснете предупреждението е реално да напишете код, който
+да обработи грешката, в нашия случай просто искаме програмата да се срине когато
+изникне проблем, за това можем да ползваме `expect`. Ще научите повече за
+въстановяване от грешки в [Глава 9.][recover]<!-- ignore -->
 
-### Printing Values with `println!` Placeholders
+<!-- ### Printing Values with `println!` Placeholders -->
+### Извеждане на Стойности с `println!` Шаблони
 
-Aside from the closing curly bracket, there’s only one more line to discuss in
-the code so far:
+<!-- Aside from the closing curly bracket, there’s only one more line to discuss in
+the code so far: -->
+Освен затварящата къдрава скоба, има само още един ред в кода, който трябва да
+обсъдим:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
-This line prints the string that now contains the user’s input. The `{}` set of
+<!-- This line prints the string that now contains the user’s input. The `{}` set of
 curly brackets is a placeholder: think of `{}` as little crab pincers that hold
 a value in place. When printing the value of a variable, the variable name can
 go inside the curly brackets. When printing the result of evaluating an
 expression, place empty curly brackets in the format string, then follow the
 format string with a comma-separated list of expressions to print in each empty
 curly bracket placeholder in the same order. Printing a variable and the result
-of an expression in one call to `println!` would look like this:
+of an expression in one call to `println!` would look like this: -->
+Този ред извежда низа, който вече съдържа въведеното от потребителя. Скобите
+`{}` са заместител: представете си `{}` като малки ракови щипки които държат
+стойността на място. Когато извеждате стойността на променлива, името ѝ може да
+бъде между къдравите скоби. Когато извеждате резултата от изпълнението на израз,
+сложете празни къдрави скоби в шаблонния низ, а след низа избройте изразите,
+които искате да изведете в съответните празни къдрави скоби, разделени със
+запетая. Извеждането на променлива и на стойността на израз в едно извикване на
+`println!` би изглеждало така:
 
 ```rust
 let x = 5;
@@ -291,11 +446,14 @@ let y = 10;
 println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
-This code would print `x = 5 and y + 2 = 12`.
+<!-- This code would print `x = 5 and y + 2 = 12`. -->
+Този код би извел `x = 5 and y + 2 = 12`.
 
-### Testing the First Part
+<!-- ### Testing the First Part -->
+### Тестване на Първата Част
 
-Let’s test the first part of the guessing game. Run it using `cargo run`:
+<!-- Let’s test the first part of the guessing game. Run it using `cargo run`: -->
+Нека тестване първата част на играта за отгатване. Изпълнете я чрез `cargo run`:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-01/
@@ -314,31 +472,52 @@ Please input your guess.
 You guessed: 6
 ```
 
-At this point, the first part of the game is done: we’re getting input from the
-keyboard and then printing it.
+<!-- At this point, the first part of the game is done: we’re getting input from the
+keyboard and then printing it. -->
+Вече първата част на играта е готова - получаваме вход от клавиатурата и го
+извеждаме.
 
-## Generating a Secret Number
+<!-- ## Generating a Secret Number -->
+## Генериране на Тайно Число
 
-Next, we need to generate a secret number that the user will try to guess. The
+<!-- Next, we need to generate a secret number that the user will try to guess. The
 secret number should be different every time so the game is fun to play more
 than once. We’ll use a random number between 1 and 100 so the game isn’t too
 difficult. Rust doesn’t yet include random number functionality in its standard
 library. However, the Rust team does provide a [`rand` crate][randcrate] with
-said functionality.
+said functionality. -->
+Сега ще трябва да генерираме тайно число, което потребителя ще се опита да
+отгатне. Тайното число трябва да е различно всеки път, за да бъде забавно да се
+играе повече от веднъж. Ще използваме случайно число между 1 и 100, за да не е
+много трудна играта. Rust все още не включва функционалност за случайни числа в
+стандартната си библиотека. Обаче екипа на Rust предоставя
+[щайгата rand][randcrate] с тази функционалност.
 
-### Using a Crate to Get More Functionality
+<!-- ### Using a Crate to Get More Functionality -->
+### Ползване на Щайга за да Получите Повече Фунцкионалност
 
-Remember that a crate is a collection of Rust source code files. The project
+<!-- Remember that a crate is a collection of Rust source code files. The project
 we’ve been building is a *binary crate*, which is an executable. The `rand`
 crate is a *library crate*, which contains code that is intended to be used in
-other programs and can’t be executed on its own.
+other programs and can’t be executed on its own. -->
+Напомняме, че щайга е набор от файлове с Rust код. Проекта, който градим досега
+е *двоична щайга* (*binary crate*), която е изпълнима. Щайгата `rand` е
+*библиотечна щайга* (*library crate*), която съдържа код, който се очаква да се
+ползва в други програми и не може да бъде изпълнен сам по себе си.
 
-Cargo’s coordination of external crates is where Cargo really shines. Before we
+<!-- Cargo’s coordination of external crates is where Cargo really shines. Before we
 can write code that uses `rand`, we need to modify the *Cargo.toml* file to
 include the `rand` crate as a dependency. Open that file now and add the
 following line to the bottom, beneath the `[dependencies]` section header that
 Cargo created for you. Be sure to specify `rand` exactly as we have here, with
-this version number, or the code examples in this tutorial may not work:
+this version number, or the code examples in this tutorial may not work: -->
+Координацията на външни щайги на Cargo е мястото, където Cargo наистина блясва.
+Преди да можем да пишем код, който ползва `rand`, ни трябва да редактираме файла
+*Cargo.toml*, за да добавим щайгата `rand` като зависимост. Сега отворете файла
+и добавете следния ред най-долу, под заглавието на раздел `[dependencies]`,
+което Cargo е създал за Вас. Уверете се, че сте сложили `rand` точно както ние
+сме го направили тук, с този номер на версията, иначе примерите с код в този
+наръчник може да не проработят:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -346,12 +525,12 @@ this version number, or the code examples in this tutorial may not work:
 * ch14-03-cargo-workspaces.md
 -->
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Файл: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
-
+<!-- До тук е преведено -->
 In the *Cargo.toml* file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
 tell Cargo which external crates your project depends on and which versions of
