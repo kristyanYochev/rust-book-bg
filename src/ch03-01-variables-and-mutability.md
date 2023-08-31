@@ -193,6 +193,6 @@ const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
-[data-types]: ch03-02-data-types.html#data-types
+[data-types]: ch03-02-data-types.html#Типове-Данни
 [storing-values-with-variables]: ch02-00-guessing-game-tutorial.html#Съхранение-на-Стойности-в-Променливи
 [const-eval]: ../reference/const_eval.html
