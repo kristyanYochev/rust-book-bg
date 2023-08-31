@@ -800,20 +800,31 @@ need to specify `1..=100` to request a number between 1 and 100. -->
 в двата края, за това трябва да напишем `1..=100`, за да поискаме число между 1
 и 100.
 
-> Note: You won’t just know which traits to use and which methods and functions
+<!-- > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
 > using it. Another neat feature of Cargo is that running the `cargo doc
 > --open` command will build documentation provided by all your dependencies
 > locally and open it in your browser. If you’re interested in other
 > functionality in the `rand` crate, for example, run `cargo doc --open` and
-> click `rand` in the sidebar on the left.
+> click `rand` in the sidebar on the left. -->
+> Бележка: Няма как продто да знаете кои трейтове да използвате и кои методи и
+> функции да извикате от щайга, затова всяка щайга има документация с инструкции
+> за ползването ѝ. Друга полезна функционалност на Cargo е, че като изпълните
+> командата `cargo doc --open`, той ще изгради докумнентацията на всичките Ви
+> зависимости локално и ще я отвори във Вашия браузър. Ако се интересувате от
+> други функционалности на щайгата `rand`, например, изпълнете `cargo doc
+> --open` и цъкнете `rand` в менюто отляво.
 
-The second new line prints the secret number. This is useful while we’re
+<!-- The second new line prints the secret number. This is useful while we’re
 developing the program to be able to test it, but we’ll delete it from the
 final version. It’s not much of a game if the program prints the answer as soon
-as it starts!
+as it starts! -->
+Вторият нов ред извежда тайното число. Това е полезно докато разработваме
+програмата, за да можем да я тестваме, но ще го изтрием от финалната версия.
+Няма да е никаква игра ако играта извежда отговора когато стартира.
 
-Try running the program a few times:
+<!-- Try running the program a few times: -->
+Нека изпълним програмата няколко пъти:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-03/
@@ -844,51 +855,85 @@ Please input your guess.
 You guessed: 5
 ```
 
-You should get different random numbers, and they should all be numbers between
-1 and 100. Great job!
+<!-- You should get different random numbers, and they should all be numbers between
+1 and 100. Great job! -->
+Трябва да видите различни случайни числа и те трябва да са числа между 1 и 100.
+Отлично!
 
-## Comparing the Guess to the Secret Number
+<!-- ## Comparing the Guess to the Secret Number -->
+## Сравняване на Предположението с Тайното Число
 
-Now that we have user input and a random number, we can compare them. That step
+<!-- Now that we have user input and a random number, we can compare them. That step
 is shown in Listing 2-4. Note that this code won’t compile just yet, as we will
-explain.
+explain. -->
+Вече като имаме въведеното от потребителя и случайно число, можем да ги срваним.
+Тази стъпка е показана в разпечатка 2-4. Забележете, че кода още няма да се
+компилира, както ще обясним по-долу.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 2-4: Handling the possible return values of
-comparing two numbers</span>
+<!-- <span class="caption">Разпечатка 2-4: Handling the possible return values of
+comparing two numbers</span> -->
+<span class="caption">Разпечатка 2-4: Обработване на възможните резултати от
+сравняването на две числа</span>
 
-First we add another `use` statement, bringing a type called
+<!-- First we add another `use` statement, bringing a type called
 `std::cmp::Ordering` into scope from the standard library. The `Ordering` type
 is another enum and has the variants `Less`, `Greater`, and `Equal`. These are
-the three outcomes that are possible when you compare two values.
+the three outcomes that are possible when you compare two values. -->
+Като за начало, добавяме още една декларация `use`, която въвежда тип, който се
+казва `std::cmp::Ordering`, в обхвата от стандартната библиотека. Типа
+`Ordering` е друг енум и има вариантите `Less`, `Greater` и `Equal`[^ordering].
+Това са трите възможни резултата от сравняването на две стойости.
 
-Then we add five new lines at the bottom that use the `Ordering` type. The
+[^ordering]: `По-малко`, `По-голямо` и `Равно`, съответно. (бел. прев.)
+
+<!-- Then we add five new lines at the bottom that use the `Ordering` type. The
 `cmp` method compares two values and can be called on anything that can be
 compared. It takes a reference to whatever you want to compare with: here it’s
 comparing `guess` to `secret_number`. Then it returns a variant of the
 `Ordering` enum we brought into scope with the `use` statement. We use a
-[`match`][match]<!-- ignore --> expression to decide what to do next based on
+[`match`][match]<!-- ignore expression to decide what to do next based on
 which variant of `Ordering` was returned from the call to `cmp` with the values
-in `guess` and `secret_number`.
+in `guess` and `secret_number`. -->
+След това добавяме пет нови реда най-отдолу, които използват типа `Ordering`.
+Метода `cmp` стрявнява две стойности и може да бъде викан на всичко, което може
+да се сравнява. Приема препратка към това, с което искате да сравнявате - в този
+случай сравнява `guess` със `secret_number`. След това връща вариант на енума
+`Ordering`, който въведохме в обхвата чрез декларацията `use`. Използваме израз
+[`match`][match]<!-- ignore -->, за да решим какво ще се случва нататък въз
+основа на това кой вариант на `Ordering` е върнат от извикването на `cmp` със
+стойностите в `guess` и `secret_number`.
 
-A `match` expression is made up of *arms*. An arm consists of a *pattern* to
+<!-- A `match` expression is made up of *arms*. An arm consists of a *pattern* to
 match against, and the code that should be run if the value given to `match`
 fits that arm’s pattern. Rust takes the value given to `match` and looks
 through each arm’s pattern in turn. Patterns and the `match` construct are
 powerful Rust features: they let you express a variety of situations your code
 might encounter and they make sure you handle them all. These features will be
-covered in detail in Chapter 6 and Chapter 18, respectively.
+covered in detail in Chapter 6 and Chapter 18, respectively. -->
+Израз `match` се състои от *разклонения*[^match-arms]. Разклоненията се състоят
+от *шаблон*, с когото да бъде сравнена дадената стойност, и кода, който трябва
+да се изпълни, ако стойността подадена на `match` пасва на шаблона на това
+разклонение. Rust сравнява стойността подадена на `match` и разглежда шаблоните
+последователно, един по един. Шаблоните и конструкцията `match` са силни
+функционалности на Rust - помагат Ви да изразите множество истуации, с които
+Вашият код може да се сблъска, и Ви уверява, че всичките биват обработени. Тези
+функционалности ще бъдад разгледани по-обстойно съответно в глави 6 и 18.
 
-Let’s walk through an example with the `match` expression we use here. Say that
+[^match-arms]: *Arms* на английски, букв. "ръце" (бел. прев.)
+
+<!-- Let’s walk through an example with the `match` expression we use here. Say that
 the user has guessed 50 and the randomly generated secret number this time is
-38.
+38. -->
+Нека разгледаме пример с израза `match`. който използваме тук. Да приемем, че
+потребителя е предположил 50 и случайно-генерираното тайно число е 38.
 
-When the code compares 50 to 38, the `cmp` method will return
+<!-- When the code compares 50 to 38, the `cmp` method will return
 `Ordering::Greater` because 50 is greater than 38. The `match` expression gets
 the `Ordering::Greater` value and starts checking each arm’s pattern. It looks
 at the first arm’s pattern, `Ordering::Less`, and sees that the value
@@ -897,9 +942,20 @@ that arm and moves to the next arm. The next arm’s pattern is
 `Ordering::Greater`, which *does* match `Ordering::Greater`! The associated
 code in that arm will execute and print `Too big!` to the screen. The `match`
 expression ends after the first successful match, so it won’t look at the last
-arm in this scenario.
+arm in this scenario. -->
+Когато кода сравнява 50 с 38, метода `cmp` ще върне `Ordering::Greater`, защото
+50 е по-голямо от 38. Израза `match` взима стойността `Ordering::Greater` и
+започва да проверява шаблона на всяко разклонение. Той разглежда шаблона на
+първото разклонение - `Ordering::Less` - и вижда, че стойността
+`Ordering::Greater` не съвпада с `Ordering::Less`, затова игнорира кода в това
+разклонение и продължава към следващото. Шаблона на следващото разклонение е
+`Ordering::Greater`, което *съвпада* с `Ordering::Greater`! Съответният код в
+това разклонение ще се изпълни и изведе `Too big!` на екрана. Израза `match`
+приключва след първото успешно съвпадение, затова няма да да разгледа последното
+разклонение в този случай.
 
-However, the code in Listing 2-4 won’t compile yet. Let’s try it:
+<!-- However, the code in Listing 2-4 won’t compile yet. Let’s try it: -->
+Обаче кодът в разпечатка 2-4 все още няма да се компилира. Нека пробваме:
 
 <!--
 The error numbers in this output should be that of the code **WITHOUT** the
@@ -910,7 +966,7 @@ anchor or snip comments
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
-The core of the error states that there are *mismatched types*. Rust has a
+<!-- The core of the error states that there are *mismatched types*. Rust has a
 strong, static type system. However, it also has type inference. When we wrote
 `let mut guess = String::new()`, Rust was able to infer that `guess` should be
 a `String` and didn’t make us write the type. The `secret_number`, on the other
@@ -919,33 +975,59 @@ and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
 64-bit number; as well as others. Unless otherwise specified, Rust defaults to
 an `i32`, which is the type of `secret_number` unless you add type information
 elsewhere that would cause Rust to infer a different numerical type. The reason
-for the error is that Rust cannot compare a string and a number type.
+for the error is that Rust cannot compare a string and a number type. -->
+В основата си грешката гласи, че има *несъвпадащи типве*. Rust има силна
+статична система за типове. Обаче има и подразбиране на типовете. Когато
+написахме `let mut guess = String::new()`. Rust успя да реши, че `guess` трябва
+да е `String` и не ни накара да напишем този тип. Тайното число `secret_number`
+обаче e от числов тип. Някои от числовите типове на Rust могат да имат стойност
+между 1 и 100: `i32` - 32-битово число; `u32` - 32-битово число без знак;
+`i64` - 64-битово число; както и други. Ако не сме посочили друго, Rust използва
+`i32` по подразвирабне, което е типа на `secret_number`, освен ако не добавим
+информация за типа на друго място, което би накарало Rust за стигне до друг
+числен тип. Причината за грешката е, че Rust не може да сравнява низ с числен
+тип.
 
-Ultimately, we want to convert the `String` the program reads as input into a
+<!-- Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it numerically to the secret number. We do
-so by adding this line to the `main` function body:
+so by adding this line to the `main` function body: -->
+В крайна сметка искаме да преобразуваме `String`а, който програмата чете, в
+реален числов тип, за да можем да ко сравним числено с тайното число. Постигаме
+това като добавим този ред в тялото на функцията `main`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
-The line is:
+<!-- The line is: -->
+Реда е:
 
 ```rust,ignore
 let guess: u32 = guess.trim().parse().expect("Please type a number!");
 ```
 
-We create a variable named `guess`. But wait, doesn’t the program already have
+<!-- We create a variable named `guess`. But wait, doesn’t the program already have
 a variable named `guess`? It does, but helpfully Rust allows us to shadow the
 previous value of `guess` with a new one. *Shadowing* lets us reuse the `guess`
 variable name rather than forcing us to create two unique variables, such as
 `guess_str` and `guess`, for example. We’ll cover this in more detail in
-[Chapter 3][shadowing]<!-- ignore -->, but for now, know that this feature is
-often used when you want to convert a value from one type to another type.
+[Chapter 3][shadowing]<!-- ignore, but for now, know that this feature is
+often used when you want to convert a value from one type to another type. -->
+Съдаваме променлива с името `guess`. Стойте малко, програмата няма ли вече
+променлива с името `guess`? Да, има, но Rust услужливо ни помага да скрием
+предишната стойност на `guess` с нова такава. *Скриването*[^shadowing] ни
+помага да преизползваме имена на променливи, вместо да ни кара да правим две
+уникални променливи, например `guess_str` и `guess`. Ще покрием това в повече
+детайли в [глава 3][shadowing]<!-- ignore -->, но засега знайте, че тази
+функционалност се ползва често когато искате да преобразувате дадена стойност
+от един тип в друг.
 
-We bind this new variable to the expression `guess.trim().parse()`. The `guess`
+[^shadowing]: *Shadowing* на аглийски, букв. "скриване в сянката", "засенчване"
+  (бел. прев.)
+
+<!-- We bind this new variable to the expression `guess.trim().parse()`. The `guess`
 in the expression refers to the original `guess` variable that contained the
 input as a string. The `trim` method on a `String` instance will eliminate any
 whitespace at the beginning and end, which we must do to be able to compare the
@@ -956,35 +1038,69 @@ types <span class="keystroke">5</span> and presses <span
 class="keystroke">enter</span>, `guess` looks like this: `5\n`. The `\n`
 represents “newline.” (On Windows, pressing <span
 class="keystroke">enter</span> results in a carriage return and a newline,
-`\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting in just `5`.
+`\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting in just `5`. -->
+Обвързваме тази нова променлива с израза `guess.trim().parse()`. `guess` в
+израза се отнася към първата променлива `guess`, която съдържа въведеното като
+низ. Метода `trim` на инстанция на `String` ще премахне всякакви прзни знаци в
+началото и края, което трябва да направим, за да можем да срваним низа с `u32`,
+който може да съдърза само числени данни. Потребителя трявбва да натисне <span
+class="keystroke">enter</span>, за да удовлетвори `read_line` и въведе своето
+предположение, което добавя знак за нов ред в низа. Например, ако потребителя
+напише <span class="keystroke">5</span> и натисне <span class="keystroke">enter
+</span>, `guess` изглежда по следния начин: `5\n`. `\n` представлява "нов ред".
+(На Windows, натискането на <span class="keystroke">enter</span> добавя връщане
+в изходно положение и нов ред - `\r\n`.) Метода `trim` премахва `\n` или `\r\n`,
+оставяйки само `5`.
 
-The [`parse` method on strings][parse]<!-- ignore --> converts a string to
+<!-- The [`parse` method on strings][parse]<!-- ignore converts a string to
 another type. Here, we use it to convert from a string to a number. We need to
 tell Rust the exact number type we want by using `let guess: u32`. The colon
 (`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust has a
 few built-in number types; the `u32` seen here is an unsigned, 32-bit integer.
 It’s a good default choice for a small positive number. You’ll learn about
-other number types in [Chapter 3][integers]<!-- ignore -->.
+other number types in [Chapter 3][integers]ignore. -->
+[Метода `parse` на низове][parse]<!-- ignore --> преобразува низ в друг тип. В
+този случай го ползваме, за да преобразуваме низ в число. Трябва да кажем на
+Rust конкретния числов тип, който искаме ползвайки `let guess: u32`. Двуеточието
+(`:`) след `guess` казва на Rust, че ще анотираме типа на променливата. Rust има
+няколко вградени числови типове; видяното тук `u32` е 32-битово цяло число без
+знак. Добър избор по подразбиране за малко положително число. Ще научите за
+други числени типове в [глава 3][integers]<!-- ignore -->.
 
-Additionally, the `u32` annotation in this example program and the comparison
+<!-- Additionally, the `u32` annotation in this example program and the comparison
 with `secret_number` means Rust will infer that `secret_number` should be a
 `u32` as well. So now the comparison will be between two values of the same
-type!
+type! -->
+Освен това, анотацията `u32` в тази примерна програма и сравнението със
+`secret_number` означават, че Rust ще заключи, че `secret_number` също трябва да
+е `u32`. Така че сега сравнението ще е между две стойности от един и същи тип!
 
-The `parse` method will only work on characters that can logically be converted
+<!-- The `parse` method will only work on characters that can logically be converted
 into numbers and so can easily cause errors. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much as the `read_line`
 method does (discussed earlier in [“Handling Potential Failure with
-`Result`”](#handling-potential-failure-with-result)<!-- ignore-->). We’ll treat
+`Result`”](#handling-potential-failure-with-result)<!-- ignore). We’ll treat
 this `Result` the same way by using the `expect` method again. If `parse`
 returns an `Err` `Result` variant because it couldn’t create a number from the
 string, the `expect` call will crash the game and print the message we give it.
 If `parse` can successfully convert the string to a number, it will return the
 `Ok` variant of `Result`, and `expect` will return the number that we want from
-the `Ok` value.
+the `Ok` value. -->
+Метода `parse` ще работи само на символи, които логически могат да бъдат
+преобразувани в числа, така че лесно може да възникнат грешки. Ако например
+низът съдържаше `A👍%`, нямаше да има начин да се преобразува това в число.
+Поради факта, че може да се провали, метода `parse` връще тип `Result`, както
+метода `read_line` (както обсъдихме по-рано в [“Обработване на Възможен Неуспех
+чрез `Result`”](#Обработване-на-Възможен-Неуспех-чрез-result)<!-- ignore -->).
+Ще обработим този `Result` по същия начин ползвайки метода `expect` отново. Ако
+`parse` върне `Err` вариант на `Result` защото не може да направи число от низа,
+извикването на `expect` ще срине играта и изведе съобщението, което му дадем.
+Ако `parse` може успешно да преобразува низа в число, ще върне `Ok` варианта на
+`Result` и `expect` ще върне числото, което ни трябва от `Ok` стойността.
 
-Let’s run the program now:
+<!-- Let’s run the program now: -->
+Нека изпълним програмата сега:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
@@ -1005,36 +1121,58 @@ You guessed: 76
 Too big!
 ```
 
-Nice! Even though spaces were added before the guess, the program still figured
+<!-- Nice! Even though spaces were added before the guess, the program still figured
 out that the user guessed 76. Run the program a few times to verify the
 different behavior with different kinds of input: guess the number correctly,
-guess a number that is too high, and guess a number that is too low.
+guess a number that is too high, and guess a number that is too low. -->
+Прекрасно! Въпреки че имаше добавени знаци за отстояние преди числото,
+програмата разбра, че потребителя е предположил 76. Изпълнете програмата няколко
+пъти, за да потвърдите различното поведение при различни видове входни данни:
+отгатнете числото, отгатнете по-голямо число и отгатнете по-малко число.
 
-We have most of the game working now, but the user can make only one guess.
-Let’s change that by adding a loop!
+<!-- We have most of the game working now, but the user can make only one guess.
+Let’s change that by adding a loop! -->
+По-голямата част от играта работи вече, но потребителя може да направи само едно
+предположение. Нека променим това като добавим цикъл!
 
-## Allowing Multiple Guesses with Looping
+<!-- ## Allowing Multiple Guesses with Looping -->
+## Позволяване на Множество Отгатвания с Цикли
 
-The `loop` keyword creates an infinite loop. We’ll add a loop to give users
-more chances at guessing the number:
+<!-- The `loop` keyword creates an infinite loop. We’ll add a loop to give users
+more chances at guessing the number: -->
+Ключовата дума `loop` създава безкраен цикъл. Ще добавим цикъл, за да дадем
+повече шансове на потребителите да отгатнат числото:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
-As you can see, we’ve moved everything from the guess input prompt onward into
+<!-- As you can see, we’ve moved everything from the guess input prompt onward into
 a loop. Be sure to indent the lines inside the loop another four spaces each
 and run the program again. The program will now ask for another guess forever,
-which actually introduces a new problem. It doesn’t seem like the user can quit!
+which actually introduces a new problem. It doesn’t seem like the user can quit! -->
+Както виждате, преместихме всичко от поканата за въвеждане на предположение
+нататък в цикъл. Уверете се, че сте сложили редовете в цикъла с отстъп от още
+четири знака за отстояние и изпълнете програмата наново. Програмата сега ще пита
+за следващо предположение завинаги, което всъщност създава нов проблем.
+Няма начин потребителя да излезе.
 
-The user could always interrupt the program by using the keyboard shortcut
+<!-- The user could always interrupt the program by using the keyboard shortcut
 <span class="keystroke">ctrl-c</span>. But there’s another way to escape this
 insatiable monster, as mentioned in the `parse` discussion in [“Comparing the
 Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
-ignore -->: if the user enters a non-number answer, the program will crash. We
-can take advantage of that to allow the user to quit, as shown here:
+ignore: if the user enters a non-number answer, the program will crash. We
+can take advantage of that to allow the user to quit, as shown here: -->
+Потребителя винаги може да прекъсне програмата позлвайки клавишната комбинация
+<span class="keystroke">ctrl-c</span>. Но има друг начин да избегнем това
+чудовище, както споменахме в дискусията за `parse` в [“Сравняване на
+Предположението с Тайното Число
+”](#Сравняване-на-Предположението-с-Тайното-Число)<!-- ignore -->: ако
+протребителя не въведе нещо, което не е число, програмата ще се срине. Можем да
+се възползваме от това за да позволим на потребителя да излезе, както е показано
+тук:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
@@ -1070,53 +1208,79 @@ thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidD
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-Typing `quit` will quit the game, but as you’ll notice, so will entering any
+<!-- Typing `quit` will quit the game, but as you’ll notice, so will entering any
 other non-number input. This is suboptimal, to say the least; we want the game
-to also stop when the correct number is guessed.
+to also stop when the correct number is guessed. -->
+Изписването на `quit` ще излезе от играта, но както ще забележите, същото ще
+направи въвеждането на всичко друго, което не е число. Най-малкото е
+неоптимално; искаме играта да спира, когато числото е отгатнато.
 
-### Quitting After a Correct Guess
+<!-- ### Quitting After a Correct Guess -->
+### Излизане След Правилно Отгатване
 
-Let’s program the game to quit when the user wins by adding a `break` statement:
+<!-- Let’s program the game to quit when the user wins by adding a `break` statement: -->
+Нека накараме програмата да излезе, когато потребителя спечели, като добавим
+команда `break`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
-Adding the `break` line after `You win!` makes the program exit the loop when
+<!-- Adding the `break` line after `You win!` makes the program exit the loop when
 the user guesses the secret number correctly. Exiting the loop also means
-exiting the program, because the loop is the last part of `main`.
+exiting the program, because the loop is the last part of `main`. -->
+Добавянето на реда `break` след `You win!ч` кара програмата за излезе от цикъла
+когато потребителя отгатне правилно тайното число. Излизането от цикла означава
+и излизане от цялата програма, защото цикъла е последната част на `main`.
 
-### Handling Invalid Input
+<!-- ### Handling Invalid Input -->
+### Обработване на Невалиден Вход
 
-To further refine the game’s behavior, rather than crashing the program when
+<!-- To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in Listing 2-5.
+is converted from a `String` to a `u32`, as shown in Listing 2-5. -->
+За да ошлайфаме още поведението на играта, вместо да сриваме програмата когато
+потребителя въведе нещо, което не е число, нека накараме играта да го игнорира,
+за да може потребителя да продължи да отгатва. Можем да направим това като
+променим реда, където `guess` бива преобразувана от `String` на `u32`, както е
+показано в разпечатка 2-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
-another guess instead of crashing the program</span>
+<!-- <span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
+another guess instead of crashing the program</span> -->
+<span class="caption">Разпечатка 2-5: Игнориране на нечислови предположения и
+подканване на друго предположение вместо сриване на програмата</span>
 
-We switch from an `expect` call to a `match` expression to move from crashing
+<!-- We switch from an `expect` call to a `match` expression to move from crashing
 on an error to handling the error. Remember that `parse` returns a `Result`
 type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using
 a `match` expression here, as we did with the `Ordering` result of the `cmp`
-method.
+method. -->
+Подменяме извикване на `expect` с израз `match`, за да преминем от сриване при
+грешка към обработване на грешката. Припомняме, че `parse` връща тип `Result` и
+`Result` е енум, който има варианти `Ok` и `Err`. Ползваме израз `match`, както
+го ползвахме за резултата `Ordering` на метода `cmp`.
 
-If `parse` is able to successfully turn the string into a number, it will
+<!-- If `parse` is able to successfully turn the string into a number, it will
 return an `Ok` value that contains the resultant number. That `Ok` value will
 match the first arm’s pattern, and the `match` expression will just return the
 `num` value that `parse` produced and put inside the `Ok` value. That number
-will end up right where we want it in the new `guess` variable we’re creating.
+will end up right where we want it in the new `guess` variable we’re creating. -->
+Ако `parse` може успешно да преобразува низа в число, ще върне стойност `Ok`,
+която съдържа резултатното число. Тази стойност `Ok` ще съвпедне с шаблона на
+първото разклонение и израза `match` просто ще върне стойността `num`, която
+`parse` създаде и сложи в стойността `Ok`. Това число ще се озове точно там,
+където го искаме, в новата променлива `guess`, която създаваме.
 
-If `parse` is *not* able to turn the string into a number, it will return an
+<!-- If `parse` is *not* able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
@@ -1124,9 +1288,20 @@ catchall value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
 execute the second arm’s code, `continue`, which tells the program to go to the
 next iteration of the `loop` and ask for another guess. So, effectively, the
-program ignores all errors that `parse` might encounter!
+program ignores all errors that `parse` might encounter! -->
+Ако `parse` *не* може да преобразува низа в число, ще върне стойност `Err`,
+която съдържа повече информация за грешката. Стойността `Err` не съвпада с
+шаблона `Ok(num)` в първото разклонение на `match`, но съвпада с шаблона
+`Err(_)` във второто разклонение. Долната черта - `_` - е стойност, която
+съвпада с всичко; в този пример казваме, че искаме да съвпадне с всички
+стойности `Err`, без значение каква информация съдържат. Така програмата ще
+изпълни кода на второто разклонение - `continue` - който кара програмата да
+прескочи към следващата итерация на цикъла `loop` и да пита за друго
+предположение. Така на практика програмата игнорира всички вЪзможни грешки от
+`parse`!
 
-Now everything in the program should work as expected. Let’s try it:
+<!-- Now everything in the program should work as expected. Let’s try it: -->
+Сега всичко в програмата би трябвало да работи подобаващо. Нека пробваме:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-05/
@@ -1160,30 +1335,44 @@ You guessed: 61
 You win!
 ```
 
-Awesome! With one tiny final tweak, we will finish the guessing game. Recall
+<!-- Awesome! With one tiny final tweak, we will finish the guessing game. Recall
 that the program is still printing the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-6 shows the final code.
+secret number. Listing 2-6 shows the final code. -->
+Супер! С една лека последна поправка ще завършим играта. Спомнете си, че
+програмата все още извежда тайното число. Това работеше добре за тестване, но
+разваля играта. Нека изтрием `println!`а, който извежда тайното число.
+Разпечатка 2-6 показва финалния код.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 2-6: Complete guessing game code</span>
+<!-- <span class="caption">Listing 2-6: Complete guessing game code</span> -->
+<span class="caption">Разпечатка 2-6: Завършеният код на играта</span>
 
-At this point, you’ve successfully built the guessing game. Congratulations!
+<!-- At this point, you’ve successfully built the guessing game. Congratulations! -->
+Вече успешно направихте игра за отгатване. Поздравления!
 
-## Summary
+<!-- ## Summary -->
+## Обобщение
 
-This project was a hands-on way to introduce you to many new Rust concepts:
+<!-- This project was a hands-on way to introduce you to many new Rust concepts:
 `let`, `match`, functions, the use of external crates, and more. In the next
 few chapters, you’ll learn about these concepts in more detail. Chapter 3
 covers concepts that most programming languages have, such as variables, data
 types, and functions, and shows how to use them in Rust. Chapter 4 explores
 ownership, a feature that makes Rust different from other languages. Chapter 5
-discusses structs and method syntax, and Chapter 6 explains how enums work.
+discusses structs and method syntax, and Chapter 6 explains how enums work. -->
+Този проект беше практически начин да Ви запознаем с много нови идеи в Rust:
+`let`, `match`, функции, ползата на външни щайги и още. В следващите няколко
+глави ще научите за тях в повече детайли. Глава 3 покрива идеи, които
+съществуват в повечето езици за програмиране като променливи, типове данни и
+функции и показва как се ползват в Rust. Глава 4 разглежда притежание -
+функционалност, която отличава Rust от другите езици. Глава 5 разглежда
+структури и синтаксиса за методи, а глава 6 обяснява как работят енумите.
 
 [prelude]: ../std/prelude/index.html
 [variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
