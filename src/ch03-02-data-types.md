@@ -1,16 +1,24 @@
 ## Типове Данни
 
-Every value in Rust is of a certain *data type*, which tells Rust what kind of
-data is being specified so it knows how to work with that data. We’ll look at
-two data type subsets: scalar and compound.
+Всяка стойност в Rust има някакъв *тип данни*, което казва на Rust какъв вид
+данни се ползва, за да знае как да работи с тези данни. Ще разгледаме две
+подмножества на типовете данни: скаларни и съставни.
 
-Keep in mind that Rust is a *statically typed* language, which means that it
+<!-- Keep in mind that Rust is a *statically typed* language, which means that it
 must know the types of all variables at compile time. The compiler can usually
 infer what type we want to use based on the value and how we use it. In cases
 when many types are possible, such as when we converted a `String` to a numeric
 type using `parse` in the [“Comparing the Guess to the Secret
-Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
-Chapter 2, we must add a type annotation, like this:
+Number”][comparing-the-guess-to-the-secret-number]<!-- ignore section in
+Chapter 2, we must add a type annotation, like this: -->
+Помнете, че Rust е *статично типизиран* език, което означава, че задължително
+трябва да знае типовете на всички променливи по време на компилация. Компилатора
+често може да заключи какъв тип искаме въз основа на стойността и как я
+ползваме. В случите, когато е възможно да са много типове, както когато
+преобразувахме `String` в числов тип чрез `parse` в раздела ["Сравняване на
+Предположението с Тайното
+Число"][comparing-the-guess-to-the-secret-number]<!-- ignore --> във 2. глава,
+задължително трябва да добавим анотация за типа по следния начин:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
