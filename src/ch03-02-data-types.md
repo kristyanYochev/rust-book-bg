@@ -326,45 +326,41 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 let a = [3; 5];
 ```
 
-<!-- The array named `a` will contain `5` elements that will all be set to the value
-`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
-more concise way. -->
 Масивът на име `a` ще съдържа `5` елемента, които ще бъдат инициализирани със
 стойността `3`. Това е същото като да напишете `let a = [3, 3, 3, 3, 3];`, но
 по по-сбит начин.
 
-##### Accessing Array Elements
+##### Достъпване Елементите на Масив
 
-An array is a single chunk of memory of a known, fixed size that can be
-allocated on the stack. You can access elements of an array using indexing,
-like this:
+Масивът е едно парче от памет с познат, фиксиран размер, което може да бъде
+заделено на стека. Можете да достъпите елементите му чрез индексиране.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1` because that
-is the value at index `[0]` in the array. The variable named `second` will get
-the value `2` from index `[1]` in the array.
+В този пример променливата `first` ще получи стойността `1`, защото това е
+стойността на индекс `[0]` в масива. Променливата `second` ще получи стойността
+`2` от индекс `[1]` в масива.
 
-##### Invalid Array Element Access
+##### Невалиден Достъп до Елементи на Масив
 
-Let’s see what happens if you try to access an element of an array that is past
-the end of the array. Say you run this code, similar to the guessing game in
-Chapter 2, to get an array index from the user:
+Нека видим какво се случва, ако се опитате да достъпите елемент от масив, който
+е след края му. Нека кажем, че изпълните този код подобен на играта на отгатване
+в глава 2, за да получите индекс в масива от потребителя:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,panics
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-This code compiles successfully. If you run this code using `cargo run` and
-enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
-value at that index in the array. If you instead enter a number past the end of
-the array, such as `10`, you’ll see output like this:
+Кода се компилира успешно. Ако изпълните този код с `cargo run` и въведете `0`,
+`1`, `2`, `3` или `4`, програмата ще изведе съответната стойност на този индекс
+в масива. Ако вместо това въведете число след края на масива, например `10`, ще
+видите изход подобен на този:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
@@ -377,24 +373,25 @@ thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a *runtime* error at the point of using an invalid
-value in the indexing operation. The program exited with an error message and
-didn’t execute the final `println!` statement. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the length,
-Rust will panic. This check has to happen at runtime, especially in this case,
-because the compiler can’t possibly know what value a user will enter when they
-run the code later.
+Програмата получи грешка *по време на изпълнение* там, където използвахме
+невалидната стойност при операцията индексиране. Програмата излезе със съобщение
+за грешка и не изпълни последната команда `println!`. Когато се опитвате да
+достъпите елемент чрез индексиране, Rust ще провери дали индекса, който сте
+подали е по-малък от дължината на масива. Ако е по-голям или равен на дължината,
+Rust ще влезе в паника. Тази проверка трябва да се случи по време на изпълнение
+особено в този случай, защото компилатора няма как да знае каква стойност ще
+въведе потребителя когато изпълнят кода по-късно.
 
-This is an example of Rust’s memory safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling and how you can
-write readable, safe code that neither panics nor allows invalid memory access.
+Това е пример за принципте за безопасност на паметта на Rust в действие. При
+много езици от ниско ниво, този вид проверка не се извършва, а когато дадете
+неправилен индекс, се достъпва невалидна памет. Rust Ви защитава от тези грешки
+като веднага излиза вместо да позволи достъпа на паметта и да продължи. В глава
+9 разглеждаме още начина, по който Rust обработва грешки и как можете да пишете
+четим и безопасен код който не влиза в паника и не позволява неправилен достъп
+в паметта.
 
 [comparing-the-guess-to-the-secret-number]:
-ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+ch02-00-guessing-game-tutorial.html#Сравняване-на-Предположението-с-Тайното-Число
 [twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement
 [control-flow]: ch03-05-control-flow.html#control-flow
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
