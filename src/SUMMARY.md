@@ -13,12 +13,12 @@
 
 - [Програмиране на Игра на Отгатване](ch02-00-guessing-game-tutorial.md)
 
-- [Common Programming Concepts](ch03-00-common-programming-concepts.md)
-    - [Variables and Mutability](ch03-01-variables-and-mutability.md)
-    - [Data Types](ch03-02-data-types.md)
-    - [Functions](ch03-03-how-functions-work.md)
-    - [Comments](ch03-04-comments.md)
-    - [Control Flow](ch03-05-control-flow.md)
+- [Общи Идеи от Програмирането](ch03-00-common-programming-concepts.md)
+    - [Променливи и Променимост](ch03-01-variables-and-mutability.md)
+    - [Типове Данни](ch03-02-data-types.md)
+    - [Функции](ch03-03-how-functions-work.md)
+    - [Коментари](ch03-04-comments.md)
+    - [Управление Потока на Изпълнение](ch03-05-control-flow.md)
 
 - [Understanding Ownership](ch04-00-understanding-ownership.md)
     - [What is Ownership?](ch04-01-what-is-ownership.md)
