@@ -97,88 +97,89 @@
 * Може да има само по един притежател по което и да е време.
 * Когато притежателя излезе от обхват, стойността се освобождава.
 
-### Variable Scope
+### Обхват на Променливите
 
-Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
-code in examples, so if you’re following along, make sure to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
-boilerplate code.
+Сега като знаете основния синтаксис на Rust, няма да слагаме всичкия код от
+`fn main() {` в примерите, така че ако работите успоредно с книгата, уверете се,
+че сте сложили примерите във функция `main` на ръка. Така нашите примери ще са
+по-сбити, което ни позволява да се концентрираме върху реалните детайли вместо
+върху "скелето".
 
-As a first example of ownership, we’ll look at the *scope* of some variables. A
-scope is the range within a program for which an item is valid. Take the
-following variable:
+Като пръв пример на притежание, ще разгледаме *обхвата* на някои променливи.
+Обхват е частта от програмата, в която даден елемент е валиден. Вижте следната
+променлива:
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 shows a
-program with comments annotating where the variable `s` would be valid.
+Променливата `s` се отнася към буквален низ, където стойността на низа е твърдо-
+написана в програмния текст. Променливата е валидна от момента на декларация до
+края на сегашния *обхват*. Разпечатка 4-1 показва програма с коментари, които
+показват къде променливата `s` е валидна.
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span>
+<span class="caption">Разпечатка 4-1: Променлива и обхватът, в който е валидна
+</span>
 
-In other words, there are two important points in time here:
+С други думи, тук има два важни момента:
 
-* When `s` comes *into* scope, it is valid.
-* It remains valid until it goes *out of* scope.
+* Когато `s` *влиза в* обхват, тя е валидна.
+* Остава валидна докато не *излезе от* обхват.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to that in other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+Засега, отношението между обхвати и кога променливите са валидни е подобно на
+това е други езици за програмиране. Сега ще надградим на това разбиране като
+въведем типа `String`.
 
-### The `String` Type
+### Типа `String`
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than those we covered in the [“Data Types”][data-types]<!-- ignore --> section
-of Chapter 3. The types covered previously are of a known size, can be stored
-on the stack and popped off the stack when their scope is over, and can be
-quickly and trivially copied to make a new, independent instance if another
-part of code needs to use the same value in a different scope. But we want to
-look at data that is stored on the heap and explore how Rust knows when to
-clean up that data, and the `String` type is a great example.
+За да демонстрираме правилата на притежанието, ни е нужен тип данни, който е
+по-сложен от тези, които покрихмв в раздела ["Типове Данни
+"][data-types]<!-- ignore --> в глава 3. Типовете, които покрихме там, са с
+известен размер, могат да бъдат съхранявани на стека и премахвани от стека,
+когато обхвата им свърши и могат бързо и лесно да бъдат копирани, за да се
+направи нова независима инстанция, ако друга част от кода се нуждае от същата
+стойност в различен обхват. Но ние искаме да разглеждаме данни на хийпа и
+разглеадаме как Rust знае кога да разчисти тези данни, а типа `String` е
+прекрасен пример.
 
-We’ll concentrate on the parts of `String` that relate to ownership. These
-aspects also apply to other complex data types, whether they are provided by
-the standard library or created by you. We’ll discuss `String` in more depth in
-[Chapter 8][ch8]<!-- ignore -->.
+Ще се концентрираме на частите на `String`, които се отнасят към притежанието,
+Тези аспекти също са приложими върху други комплексни типове данни, независимо
+дали са предоставени от стандартната библиотека или създадени от Вас. Ще обсъдим
+`String` по-дълбоко в [глава 8][ch8]<!-- ignore -->.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t suitable for every
-situation in which we may want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type manages
-data allocated on the heap and as such is able to store an amount of text that
-is unknown to us at compile time. You can create a `String` from a string
-literal using the `from` function, like so:
+Вече сме виждали буквални низове, където стойността на низа е твърдо закодирана
+в програмата ни. Буквалните низове са удбни, но не стават за всяка ситуация, в
+която бихме искали да ползваме текст. Една причина е, че са непроменими. Друга
+е, че не всяка низова стойност може да е позната докато си пишем кода: например
+ако искаме да вземем потребителски вход и да го съхраним? За тези ситуации Rust
+има втори низов тип - `String`. Този тип управлява данни заделени на хийпаи като
+такъв, може да държи количества текст, които са неузнаваеми по време на
+компилация. Можете да създадете `String` от буквален низ ползвайки функцията
+`from`, по следния начин:
 
 ```rust
 let s = String::from("hello");
 ```
 
-The double colon `::` operator allows us to namespace this particular `from`
-function under the `String` type rather than using some sort of name like
-`string_from`. We’ll discuss this syntax more in the [“Method
-Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk
-about namespacing with modules in [“Paths for Referring to an Item in the
-Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
+Оператора двойно двуеточие `::` ни позволява да извадим тази конкретна функция
+`from` от пространството от имена под типа `String` вместо да ползваме някое име
+от сорта на `string_from`. Ще обсъдим този синтаксис повече в раздела
+["Синтаксис за Методи"][method-syntax]<!-- ignore --> на глава 5 и когато
+говорим за пространства от имена с модули в ["Пътища за Достъп на Елемент
+в Модулното Дърво"][paths-module-tree]<!-- ignore --> в глава 7.
 
-This kind of string *can* be mutated:
+Този вид низове *могат* да бъде променени:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is in how these two types deal with memory.
+И, каква е разликата тук? Защо можем да променяме `String`, но не и буквални
+низове? Разликата е как тези два типа управляват паметта си.
 
 ### Memory and Allocation
 
