@@ -348,48 +348,54 @@ element in the array `a`. -->
 <span class="caption">Разпечатка 3-5: Циклене през всеки елемент в колекция чрез
 цикъл `for`</span>
 
-When we run this code, we’ll see the same output as in Listing 3-4. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
+Когато изпълним този код, ще видин същия изход като при разпечатка 3-4.
+По-важното е, че сме направили кода по-сигуран и сме елиминирали шанса за
+бъгове, които могат да са резултат на излизане от границите на масива или
+нестигането на края и пропускането на някои елементи.
 
-Using the `for` loop, you wouldn’t need to remember to change any other code if
-you changed the number of values in the array, as you would with the method
-used in Listing 3-4.
+Ползвайки цикъла `for` няма да Ви се налага да помните да променяте който и да
+е друг код ако смените броя стойности в масива, тъй както бихте с метода от
+разпечатка 3-4.
 
-The safety and conciseness of `for` loops make them the most commonly used loop
+<!-- The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
 certain number of times, as in the countdown example that used a `while` loop
 in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
 would be to use a `Range`, provided by the standard library, which generates
 all numbers in sequence starting from one number and ending before another
-number.
+number. -->
+Безопасността и стегнатостта на циклите `for` ги правят най-често ползваната
+циклова конструкция в Rust. Дори и в ситуации, в които искате да изпълните
+някакъв код даден брой пъти, както при примера с обратно броене от разпечатка
+3-3, който ползваше `while`, повечето Rustaceans биха използвали цикъл `for`.
+Начина това да се постигне е чрез `Range` предоставен от стандартната
+библиотека, който генерира всички числа в поредица започвайки от едно число и
+свършвайки преди друго число.
 
-Here’s what the countdown would look like using a `for` loop and another method
-we’ve not yet talked about, `rev`, to reverse the range:
+Ето как би изглеждало обратното броене ползвайки цикъл `for` и друг метод, за
+който не сме говорили - `rev` - за да обърнем реда:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-34-for-range/src/main.rs}}
 ```
 
-This code is a bit nicer, isn’t it?
+Този код е малко по-хубав, нали?
 
-## Summary
+## Обобщение
 
-You made it! This was a sizable chapter: you learned about variables, scalar
-and compound data types, functions, comments, `if` expressions, and loops! To
-practice with the concepts discussed in this chapter, try building programs to
-do the following:
+Справихте се! Това е голяма глава: научихте за променливи, скаларни и съставни
+типове данни, фукции, коментари, изрази `if` и цикли! За да упражните идеите от
+тази глава, опитайте се да напишете програми, които правят следното:
 
-* Convert temperatures between Fahrenheit and Celsius.
-* Generate the *n*th Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-  taking advantage of the repetition in the song.
+* Преобразуват темпрератури между Фарнахайт и Целзий.
+* Генерират *n*тото число на Фибоначи.
+* Извеждат текста на коледната песен "The Twelve Days of Christmas",
+  възползвайки се от повторението в песента.
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
-commonly exist in other programming languages: ownership.
+Когато сте готови да продължим, ще говорим за идея в Rust, която *не* се намира
+често в другите езици за програмиране - притежание.
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#Сравняване-на-Предположението-с-Тайното-Число
