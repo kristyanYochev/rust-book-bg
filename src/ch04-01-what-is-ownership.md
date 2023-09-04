@@ -1,96 +1,101 @@
-## What Is Ownership?
+## Какво Е Притежание?
 
-*Ownership* is a set of rules that govern how a Rust program manages memory.
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that regularly looks for no-longer-used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks. If
-any of the rules are violated, the program won’t compile. None of the features
-of ownership will slow down your program while it’s running.
+*Притежание* е набор от правила, които определят как програма на Rust управлява
+паметта. Всички програми трябва да управляват начина, по който полват паметта на
+компютъра, докато се изпълняват. Някои езици имат garbage collection, което
+редовно търси вече неползвана памет докато програмата се изпълнява; в други
+езици програмиста трябва изрично да заделя и освобождава паметта. Rust използва
+трети подход: паметта се управлява чрез система на притежание, което е набор от
+правила, които компилатора проверява. Ако някое от тези правила е нарушено,
+програмата няма да се компилира. Нито една от функционалностите на притежанието
+ще забави програмаа Ви докато се изпълнява.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the easier you’ll find it to naturally
-develop code that is safe and efficient. Keep at it!
+Понеже притежанието е нова идея за много програмисти, отнема малко време да ѝ
+свикнете. Добрата новина е, че колко по-опитни ставате с Rust и правилата на
+системата за притежание, толкова по-лесно ще намирате за естествена разработката
+на безопасен и ефективен код. Дерзайте!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+Когато разберете притежанието, ще имате добра основа да разберете
+функционалностите, които правят Rust уникален. В тази глава ще научите за
+притежанието като работите върху няколко примера, които се концентрират върху
+много често срещана структура от данни: низове.
 
-> ### The Stack and the Heap
+> ### Стекът и Хийпът
 >
-> Many programming languages don’t require you to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap affects how the language behaves and why
-> you have to make certain decisions. Parts of ownership will be described in
-> relation to the stack and the heap later in this chapter, so here is a brief
-> explanation in preparation.
+> Много езици за програмиране не изискват от Вас да мислите за стека и хийпа
+> много често. Но в езици за системно програмиране като Rust, това дали дадена
+> стойност е на стека или на хийпа променя поведението на езика и защо трябва да
+> взимате някои решения. Части от притежанието ще бъдат описани по отношение на
+> стека и хийпа по-късно в тази глава, така че ето бързо обяснение за
+> подготовка.
 >
-> Both the stack and the heap are parts of memory available to your code to use
-> at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite
-> order. This is referred to as *last in, first out*. Think of a stack of
-> plates: when you add more plates, you put them on top of the pile, and when
-> you need a plate, you take one off the top. Adding or removing plates from
-> the middle or bottom wouldn’t work as well! Adding data is called *pushing
-> onto the stack*, and removing data is called *popping off the stack*. All
-> data stored on the stack must have a known, fixed size. Data with an unknown
-> size at compile time or a size that might change must be stored on the heap
-> instead.
+> И стекът, и хийпът са част от паметта, която кода Ви може да достъпи по време
+> на изпълнение, но са структурирани по различни начини. Стекът съхранява
+> стойности в реда, в който ги получава, и ги премахва в обратен ред. Това се
+> нарича *last in, first out*. Представете си чинии една върху друга: като
+> добавяте още чинии, ги слагате отгоре на купа, а когато Ви трябва чиния, си я
+> взимате отгоре. Добавянето и премахването на чинии отдолу няма да работи!
+> Добавянето на данни се нарича *избутване на стека*, а премахването -
+> *премахване от стека*[^stack-ops]. Всички данни на стека трябва да имат
+> известен фиксиран размер. Данни с размер, който не се знае по време на
+> компилация, заължително трябва да се съхраняват на хийпа.
 >
-> The heap is less organized: when you put data on the heap, you request a
-> certain amount of space. The memory allocator finds an empty spot in the heap
-> that is big enough, marks it as being in use, and returns a *pointer*, which
-> is the address of that location. This process is called *allocating on the
-> heap* and is sometimes abbreviated as just *allocating* (pushing values onto
-> the stack is not considered allocating). Because the pointer to the heap is a
-> known, fixed size, you can store the pointer on the stack, but when you want
-> the actual data, you must follow the pointer. Think of being seated at a
-> restaurant. When you enter, you state the number of people in your group, and
-> the host finds an empty table that fits everyone and leads you there. If
-> someone in your group comes late, they can ask where you’ve been seated to
-> find you.
+> [^stack-ops]: *pushing onto the stack* и *popping off the stack*, съответно,
+>   на английски (бел. прев.)
 >
-> Pushing to the stack is faster than allocating on the heap because the
-> allocator never has to search for a place to store new data; that location is
-> always at the top of the stack. Comparatively, allocating space on the heap
-> requires more work because the allocator must first find a big enough space
-> to hold the data and then perform bookkeeping to prepare for the next
-> allocation.
+> Хийпът е по-неорганизиран: когато слагате данни там, изисквате дадено
+> пространство. Заделителят на памет намира празно място в хийпа, което да е
+> достатъчно голямо, отбелязва го като заето и връща *указател*, което е адреса
+> на това място в паметта. Този процес се нарича *заделяне на хийпа*[^heap-ops]
+> или понякога просто *заделяне* (избутване на стойности на стека не се води
+> заделяне). Поради причината, че указателят към хийпа е с известен фиксиран
+> размер, можете да съхранявате указател на стека, но когато Ви трябват самите
+> данни, трябва да последвате указателя. Представете си, че сте в ресторант.
+> Когато влезете, казвате колко човека сте и сервитьорът намира празна маса,
+> която да побира всички и Ви води до нея. Ако някой от групата Ви закъснява,
+> може да попита къде сте настанени, за да Ви намери.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> you have to follow a pointer to get there. Contemporary processors are faster
-> if they jump around less in memory. Continuing the analogy, consider a server
-> at a restaurant taking orders from many tables. It’s most efficient to get
-> all the orders at one table before moving on to the next table. Taking an
-> order from table A, then an order from table B, then one from A again, and
-> then one from B again would be a much slower process. By the same token, a
-> processor can do its job better if it works on data that’s close to other
-> data (as it is on the stack) rather than farther away (as it can be on the
-> heap).
+> [^heap-ops]: *allocating on the heap*, или просто *allocating* на английски
+>   (бел. прев.)
 >
-> When your code calls a function, the values passed into the function
-> (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> Избутването на стека е по-бързо от заделяне на хийпа, защото заделителят не
+> трябва да търси място за съхранение на новите данни; това място винаги е
+> най-горе на стека. За сравнение, заделянето на хийпа изисква повече работа,
+> защото заделителят трябва първо да намери достатъчно голямо място, за да
+> съхрани данните и после трябва да "разтреби" като подготовка за следващата
+> операция.
 >
-> Keeping track of what parts of code are using what data on the heap,
-> minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so you don’t run out of space are all problems that ownership
-> addresses. Once you understand ownership, you won’t need to think about the
-> stack and the heap very often, but knowing that the main purpose of ownership
-> is to manage heap data can help explain why it works the way it does.
+> Достъпът на данни на хийпа е по-бавен от достъпа на стека, защото трябва да
+> следвате указател, за да стигнете до тях. Днешните процесори са по-бързи ако
+> прескачат по-малко в паметта. Продължавайки аналога, представете си сервитьор
+> в ресторант, който взима поръчки от много маси. По-ефективно е да вземе
+> всичките поръчки от една маса преди да продължи към следващата. Взимането на
+> поръчка от маса А, после от маса Б, после пак от маса А и после пак от маса Б
+> би било много по-бавен процес. По същия начин, процесора може да си върши
+> работата по-добре ако работи върху данни, които са близо една до друга (както
+> е на стека), спрямо такива, които са по-далеч (както е на хийпа).
+>
+> Когато кодът Ви извиква функция, стойностите, които се подават на тази функция
+> (включително, потенциално, указатели към данни на хийпа), и локалните
+> променливи на функцията се избутват на стека. Когато функцията приключи, тези
+> стойности се премахват от стека.
+>
+> Следенето на това кои части от кода ползват кои части от данните на хийпа,
+> минимизирането на дубликатни данни на хийпа и зачистването на неизползваните
+> данни на хийпа, за да не Ви свърши пространството, са проблеми, които
+> притежанието решава. Веднъж разберете ли притежанието, няма да Ви се налага да
+> мислите за стека и хийпа много често, но знаейки, че основната идея на
+> притежанието е да управлява данни на хийпа, може да помогне защо работи по
+> този начин.
 
-### Ownership Rules
+### Правилата за Притежание
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate them:
+Първо нека разгледаме правилата за притежание. Помнете ги докато работим върху
+примерите, които ги демонстрират:
 
-* Each value in Rust has an *owner*.
-* There can only be one owner at a time.
-* When the owner goes out of scope, the value will be dropped.
+* Всяка стойност в Rust има *притежател*.
+* Може да има само по един притежател по което и да е време.
+* Когато притежателя излезе от обхват, стойността се освобождава.
 
 ### Variable Scope
 
