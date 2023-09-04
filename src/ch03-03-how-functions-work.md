@@ -1,168 +1,173 @@
-## Functions
+## Функции
 
-Functions are prevalent in Rust code. You’ve already seen one of the most
-important functions in the language: the `main` function, which is the entry
-point of many programs. You’ve also seen the `fn` keyword, which allows you to
-declare new functions.
+Функциите са навсякъде в код на Rust. Вече сте видяли една от най-важните
+функции в езика: функцията `main`, която е началото на много програми. Също сте
+виждали ключовата дума `fn`, която Ви позволява да декларирате нови функции.
 
-Rust code uses *snake case* as the conventional style for function and variable
-names, in which all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+Код на Rust използва *snake case* като конвенционалния стил за имена на функции
+и променливи, при който всички букви са малки и думте са разделени от долни
+черти. Ето програма, която съдържа пример за декларция на функция:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
-We define a function in Rust by entering `fn` followed by a function name and a
-set of parentheses. The curly brackets tell the compiler where the function
-body begins and ends.
+Дефинираме функция в Rust въвеждайки `fn`, последвано от името на функцията и
+скоби. Къдравите скоби казват на компилатора къде започва и завършва тялото на
+функцията.
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
-called from inside the `main` function. Note that we defined `another_function`
-*after* the `main` function in the source code; we could have defined it before
-as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere in a scope that can be seen by the caller.
+Можем да извикаме която и да е функция, която сме дефинирали, като въведем името
+ѝ и скоби. Поради причината че `another_function` е дефинирана в нашата
+програма, може да бъде извикана от фунцкията `main`. Забележете, че сме
+дефинирали `another_function` *след* `main` в кода; можехме да я дефинираме и
+преди нея също. Rust не се интересува къде дефинирате функциите си, само да са
+дефинирани някъде в обхват, който може да бъде видян от извикващия код.
 
-Let’s start a new binary project named *functions* to explore functions
-further. Place the `another_function` example in *src/main.rs* and run it. You
-should see the following output:
+Нека направим нов изпълним проект на име *funtions*, за да разгледаме още
+функциите. Сложете примера с `another_function` в *src/main.rs* и го изпълнете.
+Би трябвало да видите следния изход:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
-The lines execute in the order in which they appear in the `main` function.
-First the “Hello, world!” message prints, and then `another_function` is called
-and its message is printed.
+Редовете се изпълняват в реда, в който се виждат във функцията `main`. Първо се
+извежда съобщението "Hello, world!", а после се извиква `another_function` и
+нейното съобщение се извежда.
 
-### Parameters
+### Параметри
 
-We can define functions to have *parameters*, which are special variables that
-are part of a function’s signature. When a function has parameters, you can
-provide it with concrete values for those parameters. Technically, the concrete
-values are called *arguments*, but in casual conversation, people tend to use
-the words *parameter* and *argument* interchangeably for either the variables
-in a function’s definition or the concrete values passed in when you call a
-function.
+Можем да дефинираме функции с *параметри*, които са специални променливи, които
+са част от сигнатурата на функцията. Когато функцията има параметри, можете да
+ѝ предоставите конкретни стойности за тези параметри. Технически погледнато,
+тези стойности се наричат *аргументи*, но разговорно хората използват думите
+*параметър* и *аргумент* взаимозаменимо за променливите в дефиницията на
+функцията или конкретните стойности, които са подадени когато извиквате функция.
 
-In this version of `another_function` we add a parameter:
+В тази версия на `another_function` добавяме параметър:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
 ```
 
-Try running this program; you should get the following output:
+Пробвайте да изпълните тази програма; трябва да получите следния изход:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
-The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets containing `x` was
-in the format string.
+Декларацията на `another_function` има един параметър на име `x`. Типа на `x` е
+зададен да е `i32`. Когато подадем `5` на `another_function`, макроса `println!`
+слага `5` там, където къдравите скоби съдържащи `x` се намират в шаблонния низ.
 
-In function signatures, you *must* declare the type of each parameter. This is
-a deliberate decision in Rust’s design: requiring type annotations in function
-definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what type you mean. The compiler is also able to give
-more helpful error messages if it knows what types the function expects.
+В сигнатурите на функции *задължително* трябва да декларирате типа на всеки
+параметър. Това е умишлено решение в дизайна на Rust: изискването на типови
+анотации в дефинициите на функции означава, че на компилатора почти никога не му
+е нужно да ги ползвате на друго място в кода, за да разбере какъв тип имате
+впредвид. Компилатора също може да Ви даде по-полезни съобщения за грешка ако
+знае кои типове очаква функцията.
 
-When defining multiple parameters, separate the parameter declarations with
-commas, like this:
+Когато дефинирате няколко параметъра, разделете декларациите им със запетаи, ето
+така:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
-This example creates a function named `print_labeled_measurement` with two
-parameters. The first parameter is named `value` and is an `i32`. The second is
-named `unit_label` and is type `char`. The function then prints text containing
-both the `value` and the `unit_label`.
+Този пример съзадава функция на име `print_labeled_measurement` с два
+параметъра. Първия параметър се казва `value` и е `i32`. Втория се нарича
+`unit_label` и е от тип `char`. Функцията след това извежда текст, който съдържа
+и `value` и `unit_label`.
 
-Let’s try running this code. Replace the program currently in your *functions*
-project’s *src/main.rs* file with the preceding example and run it using `cargo
-run`:
+Нека пробваме да изпълним този код. Заменете програмата, която е сега във файла
+*src/main.rs* на Вашия проект *functions*, с предишния пример и я изпълнете чрез
+`cargo run`:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-Because we called the function with `5` as the value for `value` and `'h'` as
-the value for `unit_label`, the program output contains those values.
+Поради причината, че извикахме функцията с `5` за стойността на `value` и `'h'`
+за стойност на `unit_label`, изхода на програмата съдържа тази стойности.
 
-### Statements and Expressions
+### Команди и Изрази
 
-Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we’ve covered haven’t included an ending
-expression, but you have seen an expression as part of a statement. Because
-Rust is an expression-based language, this is an important distinction to
-understand. Other languages don’t have the same distinctions, so let’s look at
-what statements and expressions are and how their differences affect the bodies
-of functions.
+Телата на функциите са съставени от поредица от команди и могат за завършат с
+израз. Функциите, които сме покрил досега не са вкючвали завършващ израз, но сте
+виждали изрази като част от команди. Поради факта, че Rust е език основан на
+изрази, това е важна разлика, която трябва да разберете. Други езици нямат
+такива разделение, за това нека разгледаме какво са команди и изрази и как
+разликите им влияят на телата на функции.
 
-* **Statements** are instructions that perform some action and do not return
-  a value.
-* **Expressions** evaluate to a resultant value. Let’s look at some examples.
+* **Команди** са инстукции, които извършват някакво действие и не връщат
+  резултат.
+* **Изразите** се изчисляват то резултат. Нека разгледаме няколко примера.
 
-We’ve actually already used statements and expressions. Creating a variable and
-assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
-`let y = 6;` is a statement.
+Всъщност вече сме използвали команди и изрази. Съзадаването на променлива и
+присвояването на стаойност към нея с ключовата дума `let` е
+команда[^statements]. `let y = 6;` в разпечатка 3-1 е команда.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-1: A `main` function declaration containing one statement</span>
+<span class="caption">Разпечатка 3-1: Декларация на функция `main` съдържаща
+една команда</span>
 
-Function definitions are also statements; the entire preceding example is a
-statement in itself.
+[^statements]: На английски има една обща дума за "команда" и "декларация",
+  която се ползва в оригиналния текст - "statement". Поради тази причина, в този
+  превод ще ползваме думите "команда" и "декларация" в значението им на
+  "statement", като ползвам по-правилната там, където е възможно. В този случай,
+  създаването на променлива с `let` е *декларация*, но съм го оставил "команда",
+  за да създам връзката. (бел. прев.)
 
-Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do; you’ll get an error:
+Дефинициите на функции също са команди; целия предходен пример е команда сам по
+себе си.
 
-<span class="filename">Filename: src/main.rs</span>
+Командите не връщат стойности. Следователно няма как да ги присвоите команда
+`let` на друга променлива, както следният код се опитва да направи; ще получите
+грешка:
+
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
-When you run this program, the error you’ll get looks like this:
+Когато изпълните програмата, грешката, която ще получите, изглежда така:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for
-`x` to bind to. This is different from what happens in other languages, such as
-C and Ruby, where the assignment returns the value of the assignment. In those
-languages, you can write `x = y = 6` and have both `x` and `y` have the value
-`6`; that is not the case in Rust.
+Командата `let y = 6` не връща стойност, тоест няма какво да се обвърже с `x`.
+Това е различно от това, което се случва в другите езици като C и Ruby, където
+присвояването връща стойността за присвояване. В тези езици можете да напишете
+`x = y = 6` и така и `x` и `y` да имат стойността `6`; това не е така в Rust.
 
-Expressions evaluate to a value and make up most of the rest of the code that
-you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
-expression that evaluates to the value `11`. Expressions can be part of
-statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. A new scope block created with
-curly brackets is an expression, for example:
+Изразите се изчисляват до стойност и са голяма част от останалия код, който ще
+пишете на Rust. Помислете си за математическа операция като `5 + 6`, която е
+израз, който се изчислява до стойността `11`. Изразите могат да са част от
+команди: в разпечатка 3-1, `6`цата в командата `let y = 6;` е израз, който се
+изчислява до стойността `6`. Извикването на фунцкия е израз. Извикването на
+макрос също е израз. Нов обхватен блок създаден с къдрави скоби е израз.
+Например:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
 ```
 
-This expression:
+Този израз:
 
 ```rust,ignore
 {
@@ -171,81 +176,79 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note that the `x + 1` line doesn’t have a
-semicolon at the end, which is unlike most of the lines you’ve seen so far.
-Expressions do not include ending semicolons. If you add a semicolon to the end
-of an expression, you turn it into a statement, and it will then not return a
-value. Keep this in mind as you explore function return values and expressions
-next.
+е блок, който в този случай се изчислява до `4`. Тази стойност се обвързва с `y`
+като част от командата `let`. Забележете, че реда `x + 1` няма точка и запетая
+накрая, което е различно от повечето редове, които сте видяли досега. Изразите
+не включват точки и запетаи накрая. Ако добавите точка и запетая на края на
+израз, Вие го превръщате в команда и стойността няма да бъде върната. Помнете
+това докато разглеждате връщани стойности от функции и изрази.
 
-### Functions with Return Values
+### Функции, Които Връщат Стойности
 
-Functions can return values to the code that calls them. We don’t name return
-values, but we must declare their type after an arrow (`->`). In Rust, the
-return value of the function is synonymous with the value of the final
-expression in the block of the body of a function. You can return early from a
-function by using the `return` keyword and specifying a value, but most
-functions return the last expression implicitly. Here’s an example of a
-function that returns a value:
+Функциите могат да връщат стойности на кода, който ги е извикал. Не даваме име
+на връщаните стойности, но трябва да декларираме типа им след стрелка (`->`). В
+Rust стойността върната от функция е същата като финалния израз в блока в тялото
+на функцията. Можете да върнете по-рано от функцията ползвайки ключовата дума
+`return` и задавайки стойност, но повечето функции имплицитно връщат последия
+израз. Ето пример за функция, която връща стойност:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-There are no function calls, macros, or even `let` statements in the `five`
-function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified too, as `-> i32`. Try
-running this code; the output should look like this:
+Няма извиквания на функции, макроси или дори команди `let` във функцията `five`,
+а просто числото `5` само по себе си. Това е напълно валидна фунцкия в Rust.
+Забележете, че типа, връщан от функцията също е деклариран като `-> i32`.
+Опитайте се да изплните този код; изхода трябва да изглежда така:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type
-is `i32`. Let’s examine this in more detail. There are two important bits:
-first, the line `let x = five();` shows that we’re using the return value of a
-function to initialize a variable. Because the function `five` returns a `5`,
-that line is the same as the following:
+`5` във `five` е стойността, която връща функцията, което е причината връщания
+тип да е `i32`. Нека разгледаме това в повече детайли. Има две важни части:
+първо, реда `let x = five();` показва, че ползваме връщаната стойност на
+функцията, за да инициализираме променлива. Този ред е еднакъв със следния,
+защото функцията `five` връща `5`:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value, but the body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return.
+Второ, функцията `five` няма параметри и дефинира типа на връщаната стойност, но
+тялото на функцията е сам-самичко `5` без точка и запетая, защото е израз, чиято
+стойност искаме да върнем.
 
-Let’s look at another example:
+Нека разгледаме още един пример:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Running this code will print `The value of x is: 6`. But if we place a
-semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement, we’ll get an error:
+Ако изпълним този код, ще се изведе `The value of x is: 6`. Но ако сложим точка
+и запетая на края на реда, който съдържа `x + 1`, променяйки го от израз на
+команда ще получим грешка:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
-Compiling this code produces an error, as follows:
+Компилирането на този код предизвиква грешка като следната:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-The main error message, `mismatched types`, reveals the core issue with this
-code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the unit type. Therefore, nothing is returned, which contradicts the function
-definition and results in an error. In this output, Rust provides a message to
-possibly help rectify this issue: it suggests removing the semicolon, which
-would fix the error.
+Съобщението за грешка, `mismatched types`, разкрива основен проблем с този код.
+Дефиницията на функцията `plus_one` казва, че ще върне `i32`, но командите не
+се изчисляват до стойност, което е показано чрез `()` - единичния тип.
+Следователно нищо не е върнато, което си противоречи с дефиницията на фунцкцията
+и предизвиква грешка. В този изход, Rust предоставя съобщение, с което може да
+помогне да се оправи проблема: предлага да махнете точката и запетаята, което би
+поправило грешката.

@@ -1,19 +1,19 @@
-## Comments
+## Коментари
 
-All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave *comments* in
-their source code that the compiler will ignore but people reading the source
-code may find useful.
+Всички програмисти се стремят да пишат код така, че да е лесен за разбиране, но
+понякога има нужда от допълнителни обяснения. В тези случаи програмистите
+оставят *коментари* в изходиния си код, които компилатора ще игнорира, но
+хората, които четат кода, биха намерили за полезни.
 
-Here’s a simple comment:
+Ето прост коментар:
 
 ```rust
 // hello, world
 ```
 
-In Rust, the idiomatic comment style starts a comment with two slashes, and the
-comment continues until the end of the line. For comments that extend beyond a
-single line, you’ll need to include `//` on each line, like this:
+В Rust, идиоматичния стил за коментари започва коментар с две наклонени черти и
+коментара продължава до края на реда. За коментари, които са по-дълги от един
+ред, ще трябва да добавяте `//` на всеки ред, по следния начин:
 
 ```rust
 // So we’re doing something complicated here, long enough that we need
@@ -21,25 +21,25 @@ single line, you’ll need to include `//` on each line, like this:
 // explain what’s going on.
 ```
 
-Comments can also be placed at the end of lines containing code:
+Коментарите могат също да се слагат на края на редове съдържащи код:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a
-separate line above the code it’s annotating:
+Но по-често ще ги видите ползвани в следния формат, където коментарът е на
+оъделен ред над кода, който обяснява:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll
-discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
-section of Chapter 14.
+Rust има още един вид коментари - документационни коментари, които ще обсъдим в
+раздела ["Публикуване на Щайга в Crates.io"][publishing]<!-- ignore --> на глава
+14.
 
 [publishing]: ch14-02-publishing-to-crates-io.html
